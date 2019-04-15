@@ -7,11 +7,10 @@
 
 int main()
 {
-	std::string a("hi");
-
 	JFApplication app;
 
-	JFLog("hi");
-	//int a = Min(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
+	JFVector2 v = JFVector2::Zero;
+	v.Dot(JFVector2(1));
+
 	return 0;
 }

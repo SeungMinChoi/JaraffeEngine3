@@ -3,6 +3,10 @@
 #define JFENGINE_NAME "JaraffeEngine"
 
 // for DLL
+#if !defined(JF_STATIC) && !defined(JF_DYNAMIC)
+#	define JF_DYNAMIC
+#endif
+
 #ifdef JF_DYNAMIC
 #	ifdef JF_EXPORTS
 #		define JF_API __declspec(dllexport)

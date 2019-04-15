@@ -1,5 +1,27 @@
 #pragma once
 
+#include "../JFInclude.h"
+
+#define PI 3.14159265359
+
+FORCEINLINE float RadianToDegree(float radian)
+{
+	return radian * (180.0f / static_cast<float>(PI));
+}
+FORCEINLINE double RadianToDegree(double radian)
+{
+	return radian * (180.0 / PI);
+}
+
+FORCEINLINE float DegreeToRadian(float degree)
+{
+	return degree * (static_cast<float>(PI) / 180.0f);
+}
+FORCEINLINE double DegreeToRadian(double degree)
+{
+	return degree * (PI / 180.0);
+}
+
 template<class T, class U>
 decltype(auto) Min(const T& a, const U& b)
 {
