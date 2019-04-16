@@ -7,6 +7,8 @@ namespace JFFoundation
 	// https://stackoverflow.com/questions/13509733/what-is-the-use-of-wchar-t-in-general-programming
 	// https://stackoverflow.com/questions/3951722/whats-the-difference-between-unicode-and-utf-8/13212528#13212528
 	// UTF - 8 is an encoding - Unicode is a character set
+	// wchar_t is UTF-16 endian order to cpu bind
+	// if check the endian order, use the short type(2byte) casting of char type 
 	class JF_API JFStringW
 	{
 	public:
