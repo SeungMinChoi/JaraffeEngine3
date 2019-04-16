@@ -4,6 +4,8 @@
 
 namespace JFFoundation
 {
+	// char is multibyte char type
+	// need UTF-8
 	class JF_API JFStringA
 	{
 	public:
