@@ -13,8 +13,6 @@ namespace JFFramework
 		JFVector2();
 		JFVector2(float s);
 		JFVector2(float x, float y);
-		JFVector2(JFVector2&& v) noexcept;
-		JFVector2(const JFVector2& v);
 
 		JFVector2 operator * (float s) const;
 		JFVector2 operator / (float s) const;
@@ -41,7 +39,14 @@ namespace JFFramework
 		JFVector2& Normalize();
 
 	public:
-		float x;
-		float y;
+		union
+		{
+			struct
+			{
+				float x;
+				float y;
+			};
+			float v[2];
+		};
 	};
 }

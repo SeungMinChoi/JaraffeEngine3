@@ -191,6 +191,7 @@
     <ClInclude Include="Framework\JFApplication.h" />
     <ClInclude Include="Framework\GraphicsDevices\JFGraphicsDevice.h" />
     <ClInclude Include="Framework\JFVector2.h" />
+    <ClInclude Include="Framework\JFVector3.h" />
     <ClInclude Include="Framework\Platform\JFWindow.h" />
     <ClInclude Include="JFEngine.h" />
     <ClInclude Include="JFInclude.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="JFFramework.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanDevice.h" />
     <ClInclude Include="Framework\GraphicsDevices\Interface\JFGraphicsDeviceInterface.h" />
+    <ClInclude Include="Framework\JFVector4.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFLog.cpp" />
@@ -211,7 +213,9 @@
     <ClCompile Include="Framework\JFApplication.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\JFGraphicsDevice.cpp" />
     <ClCompile Include="Framework\JFVector2.cpp" />
+    <ClCompile Include="Framework\JFVector3.cpp" />
     <ClCompile Include="Framework\Platform\Win32\JFWin32.cpp" />
+    <ClCompile Include="Framework\JFVector4.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

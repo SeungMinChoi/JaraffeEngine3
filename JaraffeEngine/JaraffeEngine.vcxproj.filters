@@ -37,20 +37,32 @@
     <ClInclude Include="Framework\GraphicsDevices\Interface\JFGraphicsDeviceInterface.h">
       <Filter>Framework\GraphicsDevice</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanLayerChecker.h" />
-    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanInclude.h" />
     <ClInclude Include="Foundation\JFMath.h" />
     <ClInclude Include="Foundation\JFLog.h" />
-    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanDebug.h" />
-    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanTools.h" />
     <ClInclude Include="Framework\Platform\JFWindow.h" />
     <ClInclude Include="Framework\JFVector2.h" />
     <ClInclude Include="Foundation\JFStringA.h" />
     <ClInclude Include="JFEngine.h" />
-    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanCommandBuffer.h" />
     <ClInclude Include="Foundation\JFSort.h" />
     <ClInclude Include="Foundation\JFObject.h" />
     <ClInclude Include="Foundation\JFStringW.h" />
+    <ClInclude Include="Framework\JFVector3.h" />
+    <ClInclude Include="Framework\JFVector4.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanCommandBuffer.h">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanDebug.h">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanInclude.h">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanLayerChecker.h">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanTools.h">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
@@ -63,13 +75,21 @@
     <ClCompile Include="Framework\GraphicsDevices\JFGraphicsDevice.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanLayerChecker.cpp" />
     <ClCompile Include="Foundation\JFLog.cpp" />
-    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanDebug.cpp" />
     <ClCompile Include="Framework\JFVector2.cpp" />
     <ClCompile Include="Foundation\JFStringA.cpp" />
     <ClCompile Include="Framework\Platform\Win32\JFWin32.cpp" />
-    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanCommandBuffer.cpp" />
     <ClCompile Include="Foundation\JFStringW.cpp" />
+    <ClCompile Include="Framework\JFVector3.cpp" />
+    <ClCompile Include="Framework\JFVector4.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanCommandBuffer.cpp">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanDebug.cpp">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanLayerChecker.cpp">
+      <Filter>Framework\GraphicsDevice\Vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
