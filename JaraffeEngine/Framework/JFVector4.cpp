@@ -7,7 +7,7 @@ const JFVector4 JFFramework::JFVector4::One = JFVector4(1);
 const JFVector4 JFFramework::JFVector4::Zero = JFVector4(0);
 
 JFFramework::JFVector4::JFVector4()
-	: x(0.0f), y(0.0f), z(0.0f), w(0.0f)
+	: x(0), y(0), z(0), w(0)
 {}
 
 JFFramework::JFVector4::JFVector4(float s)

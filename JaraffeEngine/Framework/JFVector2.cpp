@@ -7,7 +7,7 @@ const JFVector2 JFFramework::JFVector2::One = JFVector2(1);
 const JFVector2 JFFramework::JFVector2::Zero = JFVector2(0);
 
 JFFramework::JFVector2::JFVector2()
-	: x(0.0f), y(0.0f)
+	: x(0), y(0)
 {}
 
 JFFramework::JFVector2::JFVector2(float s)
