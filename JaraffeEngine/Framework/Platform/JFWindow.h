@@ -11,6 +11,8 @@ namespace JFFramework
 		void Create();
 		void Destroy();
 
+		void* Handle() const;
+
 	private:
 		void* impl;
 	};

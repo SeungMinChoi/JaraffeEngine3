@@ -122,4 +122,10 @@ void JFFramework::JFWindow::Destroy()
 	PostMessageW(win32->hWnd, WM_CLOSE, 0, 0);
 }
 
+void* JFFramework::JFWindow::Handle() const
+{
+	auto win32 = reinterpret_cast<Private::Win32Impl*>(impl);
+	return win32->hWnd;
+}
+
 #endif

@@ -13,16 +13,16 @@ namespace JFFramework
 		JFVulkanDevice();
 		~JFVulkanDevice();
 
-	private:
-		VkResult _CreateInstance();
-		void _DestroyInstance();
-
-		VkResult _CreateDevice();
-		void _DestroyDevice();
-
-		VkInstance instance;
-		
 		VkDevice device;
+		VkInstance instance;
+
+	private:
+		VkResult CreateInstance();
+		void DestroyInstance();
+
+		VkResult CreateDevice();
+		void DestroyDevice();
+	
 		VkPhysicalDevice* physicalDevice;
 		VkPhysicalDeviceFeatures deviceFeatures;
 		VkPhysicalDeviceProperties deviceProperties;

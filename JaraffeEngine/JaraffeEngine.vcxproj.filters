@@ -66,6 +66,7 @@
     <ClInclude Include="Framework\JFMatrix2.h" />
     <ClInclude Include="Framework\JFMatrix3.h" />
     <ClInclude Include="Framework\JFMatrix4.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanSwapChain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
@@ -97,5 +98,6 @@
     <ClCompile Include="Framework\JFMatrix2.cpp" />
     <ClCompile Include="Framework\JFMatrix3.cpp" />
     <ClCompile Include="Framework\JFMatrix4.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanSwapChain.cpp" />
   </ItemGroup>
 </Project>

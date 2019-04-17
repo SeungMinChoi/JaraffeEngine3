@@ -11,8 +11,8 @@ using namespace JFFoundation;
 
 JFFramework::JFVulkanDevice::JFVulkanDevice()
 {
-	VK_CHECK_RESULT(_CreateInstance());
-	VK_CHECK_RESULT(_CreateDevice());
+	VK_CHECK_RESULT(CreateInstance());
+	VK_CHECK_RESULT(CreateDevice());
 
 #ifdef VK_VALIDATION
 	debug.Setup(instance);
@@ -25,11 +25,11 @@ JFFramework::JFVulkanDevice::~JFVulkanDevice()
 	debug.Free(instance);
 #endif
 
-	_DestroyDevice();
-	_DestroyInstance();
+	DestroyDevice();
+	DestroyInstance();
 }
 
-VkResult JFFramework::JFVulkanDevice::_CreateInstance()
+VkResult JFFramework::JFVulkanDevice::CreateInstance()
 {
 	JFArray<const char*> layerNames = { "VK_LAYER_LUNARG_standard_validation" };
 	// VK_LAYER_LUNARG_api_dump
@@ -89,12 +89,12 @@ VkResult JFFramework::JFVulkanDevice::_CreateInstance()
 	return vkCreateInstance(&instanceCreateInfo, nullptr, &instance);
 }
 
-void JFFramework::JFVulkanDevice::_DestroyInstance()
+void JFFramework::JFVulkanDevice::DestroyInstance()
 {
 	vkDestroyInstance(instance, nullptr);
 }
 
-VkResult JFFramework::JFVulkanDevice::_CreateDevice()
+VkResult JFFramework::JFVulkanDevice::CreateDevice()
 {
 	JFArray<const char*> layerNames = { "VK_LAYER_LUNARG_standard_validation" };
 	JFArray<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
@@ -182,7 +182,7 @@ VkResult JFFramework::JFVulkanDevice::_CreateDevice()
 	return VK_INCOMPLETE;
 }
 
-void JFFramework::JFVulkanDevice::_DestroyDevice()
+void JFFramework::JFVulkanDevice::DestroyDevice()
 {
 	vkDestroyDevice(device, nullptr);
 }
