@@ -9,7 +9,7 @@ bool Framework::JFVulkanLayerChecker::CheckLayer(JFFoundation::JFArray<const cha
 
 	const JFArray<VkLayerProperties>& layerProperties = LayerProperties();
 
-	// °¢ ·¹ÀÌ¾î°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎ ÇÕ´Ï´Ù.
+	// ê° ë ˆì´ì–´ê°€ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸ í•©ë‹ˆë‹¤.
 	for (const char* layer : layers)
 	{
 		bool find = false;
@@ -40,21 +40,21 @@ bool Framework::JFVulkanLayerChecker::CheckInstanceExtension(JFFoundation::JFArr
 
 	JFArray<JFArray<VkExtensionProperties>> allInstanceExtensions;
 
-	// °¢ ·¹ÀÌ¾î¿¡ ÇØ´çÇÏ´Â È®ÀåÆÇµéÀ» ¾ò¾î ¿É´Ï´Ù.
+	// ê° ë ˆì´ì–´ì— í•´ë‹¹í•˜ëŠ” í™•ì¥íŒë“¤ì„ ì–»ì–´ ì˜µë‹ˆë‹¤.
 	VkResult result;
 	for (const VkLayerProperties& layerProperti : layerProperties)
 	{
 		uint32_t instanceExtensionCount = 0;
 		JFArray<VkExtensionProperties> instanceExtensions;
 
-		// ÇØ´ç layer¿¡ ÇØ´çÇÏ´Â È®ÀåÆÇÀÇ °³¼ö¸¦ ¾ò¾î¿É´Ï´Ù.
+		// í•´ë‹¹ layerì— í•´ë‹¹í•˜ëŠ” í™•ì¥íŒì˜ ê°œìˆ˜ë¥¼ ì–»ì–´ì˜µë‹ˆë‹¤.
 		result = vkEnumerateInstanceExtensionProperties(layerProperti.layerName, &instanceExtensionCount, nullptr);
 
 		// Check)
 		if (result != VK_SUCCESS || instanceExtensionCount == 0)
 			continue;
 
-		// ÇØ´ç layer¿¡ ÇØ´çÇÏ´Â È®ÀåÆÇ Á¤º¸¸¦ ¾ò¾î¿É´Ï´Ù.
+		// í•´ë‹¹ layerì— í•´ë‹¹í•˜ëŠ” í™•ì¥íŒ ì •ë³´ë¥¼ ì–»ì–´ì˜µë‹ˆë‹¤.
 		instanceExtensions.Resize(instanceExtensionCount);
 		result = vkEnumerateInstanceExtensionProperties(layerProperti.layerName, &instanceExtensionCount, instanceExtensions.Data());
 
@@ -95,21 +95,21 @@ bool Framework::JFVulkanLayerChecker::CheckDeviceExtension(VkPhysicalDevice* dev
 
 	JFArray<JFArray<VkExtensionProperties>> allDeviceExtensions;
 
-	// °¢ ·¹ÀÌ¾î¿¡ ÇØ´çÇÏ´Â È®ÀåÆÇµéÀ» ¾ò¾î ¿É´Ï´Ù.
+	// ê° ë ˆì´ì–´ì— í•´ë‹¹í•˜ëŠ” í™•ì¥íŒë“¤ì„ ì–»ì–´ ì˜µë‹ˆë‹¤.
 	VkResult result;
 	for (const VkLayerProperties& layerProperti : layerProperties)
 	{
 		uint32_t deviceExtensionCount = 0;
 		JFArray<VkExtensionProperties> deviceExtensions;
 
-		// ÇØ´ç layer¿¡ ÇØ´çÇÏ´Â È®ÀåÆÇÀÇ °³¼ö¸¦ ¾ò¾î¿É´Ï´Ù.
+		// í•´ë‹¹ layerì— í•´ë‹¹í•˜ëŠ” í™•ì¥íŒì˜ ê°œìˆ˜ë¥¼ ì–»ì–´ì˜µë‹ˆë‹¤.
 		result = vkEnumerateDeviceExtensionProperties(*device, layerProperti.layerName, &deviceExtensionCount, nullptr);
 
 		// Check)
 		if (result != VK_SUCCESS || deviceExtensionCount == 0)
 			continue;
 
-		// ÇØ´ç layer¿¡ ÇØ´çÇÏ´Â È®ÀåÆÇ Á¤º¸¸¦ ¾ò¾î¿É´Ï´Ù.
+		// í•´ë‹¹ layerì— í•´ë‹¹í•˜ëŠ” í™•ì¥íŒ ì •ë³´ë¥¼ ì–»ì–´ì˜µë‹ˆë‹¤.
 		deviceExtensions.Resize(deviceExtensionCount);
 		result = vkEnumerateDeviceExtensionProperties(*device, layerProperti.layerName, &deviceExtensionCount, deviceExtensions.Data());
 
@@ -151,7 +151,7 @@ const JFArray<VkLayerProperties>& Framework::JFVulkanLayerChecker::LayerProperti
 		uint32_t instanceLayerCount = 0;
 		JFArray<VkLayerProperties> layerProperties;
 
-		// 1) µÎ¹øÂ° ÀÎÀÚ¸¦ null ·Î ¼³Á¤ÇØ¼­ Layer °³¼ö¸¦ ¾ò¾î ¿É´Ï´Ù.
+		// 1) ë‘ë²ˆì§¸ ì¸ìë¥¼ null ë¡œ ì„¤ì •í•´ì„œ Layer ê°œìˆ˜ë¥¼ ì–»ì–´ ì˜µë‹ˆë‹¤.
 		VkResult result = vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr);
 
 		// Check)
@@ -159,7 +159,7 @@ const JFArray<VkLayerProperties>& Framework::JFVulkanLayerChecker::LayerProperti
 		if (instanceLayerCount == 0)
 			return layerProperties;
 
-		// 2) Layer °³¼ö¸¸Å­ ¹Ì¸® ¹è¿­ °ø°£À» ÇÒ´ç ¹ŞÀºµÚ Layer Á¤º¸µéÀ» ¾ò¾î¿É´Ï´Ù.
+		// 2) Layer ê°œìˆ˜ë§Œí¼ ë¯¸ë¦¬ ë°°ì—´ ê³µê°„ì„ í• ë‹¹ ë°›ì€ë’¤ Layer ì •ë³´ë“¤ì„ ì–»ì–´ì˜µë‹ˆë‹¤.
 		layerProperties.Resize(instanceLayerCount);
 		result = vkEnumerateInstanceLayerProperties(&instanceLayerCount, layerProperties.Data());
 

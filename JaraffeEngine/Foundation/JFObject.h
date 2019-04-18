@@ -2,7 +2,7 @@
 
 namespace JFFoundation
 {
-	// TODO :ref count Á¦ÀÛÇÊ¿ä
+	// TODO :ref count ë§Œë“¤ì–´ì•¼í•¨
 	template <typename T>
 	class JFObject
 	{

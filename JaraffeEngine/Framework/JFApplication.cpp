@@ -55,18 +55,18 @@ void JFFramework::JFApplication::Render()
 void JFFramework::JFApplication::_SetupConsole()
 {
 #if defined(_WIN32)
-	//// ÄÜ¼ÖÃ¢ »ý¼º
+	//// ì½˜ì†”ì°½ ìƒì„±
 	//AllocConsole();
-	//// Ç¥ÁØ Ãâ·Â ÇÚµé ¾òÀ½
+	//// í‘œì¤€ ì¶œë ¥ í•¸ë“¤ ì–»ìŒ
 	//HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	//
 	//DWORD dwByte(0);
-	//// Ãâ·ÂÇÒ ¹®ÀÚ¿­
+	//// ì¶œë ¥í•  ë¬¸ìžì—´
 	//const char* strMsg = "Hello, World!";
-	//// Ãâ·Â
+	//// ì¶œë ¥
 	//WriteFile(hConsole, strMsg, strlen(strMsg), &dwByte, NULL);
 	//
-	//// ÇØÁ¦½Ã ( ¹Ù·Î ÇØÁ¦ÇÏ¸é Ãâ·Â °á°ú¸¦ È®ÀÎÇÏ±âµµ Àü¿¡ ¾ø¾îÁ® ¹ö¸®´Ï ³ªÁß¿¡ ÇØÁ¦ ÇØ¾ß ÇÔ)
+	//// í•´ì œì‹œ ( ë°”ë¡œ í•´ì œí•˜ë©´ ì¶œë ¥ ê²°ê³¼ë¥¼ í™•ì¸í•˜ê¸°ë„ ì „ì— ì—†ì–´ì ¸ ë²„ë¦¬ë‹ˆ ë‚˜ì¤‘ì— í•´ì œ í•´ì•¼ í•¨)
 	//FreeConsole();
 
 	AllocConsole();

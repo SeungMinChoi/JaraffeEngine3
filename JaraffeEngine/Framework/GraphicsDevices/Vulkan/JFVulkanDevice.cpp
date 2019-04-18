@@ -1,4 +1,4 @@
-#include "../../JFInclude.h"
+ï»¿#include "../../JFInclude.h"
 #include "JFVulkanDevice.h"
 
 #include "../../JFFoundation.h"
@@ -109,10 +109,10 @@ VkResult JFFramework::JFVulkanDevice::CreateDevice()
 	deviceList.Resize(deviceCount);
 	VK_CHECK_RESULT(vkEnumeratePhysicalDevices(instance, &deviceCount, deviceList.Data()));
 
-	// ÀÏ´Ü Ã¹¹øÂ° µğ¹ÙÀÌ½º.
-	// ÀÌÈÄ¿¡ ¿øÇÏ´Â ±â´ÉµéÀ» »ç¿ë °¡´ÉÇÒ ¶§ °¡»êÁ¡À» ÁÖ¾î¼­ µğÆúÆ®·Î °í¸£µµ·Ï ÇÏ°í
-	// ±â´Éµé¿¡ ÇÊ¿äÇÑ ±â´ÉµéÀ» Áö¿øÇÏ´ÂÁö ¿©ºÎ¿¡ µû¶ó¼­ ±×·¡ÇÈ ±â¼úµé È°¼ºÈ­ ¿©ºÎ¸¦ Á¤ÇÏµµ·Ï ÇÏÀÚ. ( fallbackÀ» Áö¿øÇÏ´Â ÇüÅÂ·Î ÇÒ ¼ö ÀÖµµ·Ï )
-	// ´Ü, ÃÖ¼Ò »ç¾çÀº ÀÖ¾î¾ß ±¸ÇöÀÌ ÆíÇØÁúµí.
+	// ì¼ë‹¨ ì²«ë²ˆì§¸ ë””ë°”ì´ìŠ¤.
+	// ì´í›„ì— ì›í•˜ëŠ” ê¸°ëŠ¥ë“¤ì„ ì‚¬ìš© ê°€ëŠ¥í•  ë•Œ ê°€ì‚°ì ì„ ì£¼ì–´ì„œ ë””í´íŠ¸ë¡œ ê³ ë¥´ë„ë¡ í•˜ê³ 
+	// ê¸°ëŠ¥ë“¤ì— í•„ìš”í•œ ê¸°ëŠ¥ë“¤ì„ ì§€ì›í•˜ëŠ”ì§€ ì—¬ë¶€ì— ë”°ë¼ì„œ ê·¸ë˜í”½ ê¸°ìˆ ë“¤ í™œì„±í™” ì—¬ë¶€ë¥¼ ì •í•˜ë„ë¡ í•˜ì. ( fallbackì„ ì§€ì›í•˜ëŠ” í˜•íƒœë¡œ í•  ìˆ˜ ìˆë„ë¡ )
+	// ë‹¨, ìµœì†Œ ì‚¬ì–‘ì€ ìˆì–´ì•¼ êµ¬í˜„ì´ í¸í•´ì§ˆë“¯.
 	//for (VkPhysicalDevice& pd : deviceList)
 	VkPhysicalDevice& pd = deviceList[0];
 	{
@@ -144,7 +144,7 @@ VkResult JFFramework::JFVulkanDevice::CreateDevice()
 		graphicsQueueIndex = 0;
 		for (const VkQueueFamilyProperties& queueFamilyProperti : queueFamilyProps)
 		{
-			// ÄÄÇ»ÆÃ, Àü¼Û, ±×·¡ÇÈ½º, Èñ¼Ò Å¥·Î ³ª´¶´Ù.
+			// ì»´í“¨íŒ…, ì „ì†¡, ê·¸ë˜í”½ìŠ¤, í¬ì†Œ íë¡œ ë‚˜ë‰œë‹¤.
 			if (queueFamilyProperti.queueFlags & VK_QUEUE_COMPUTE_BIT) 
 			{
 				++graphicsQueueIndex;
@@ -153,7 +153,7 @@ VkResult JFFramework::JFVulkanDevice::CreateDevice()
 				queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 				queueCreateInfo.pNext = NULL;
 				queueCreateInfo.queueFamilyIndex = graphicsQueueIndex;
-				queueCreateInfo.queueCount = 1;	// ÇÏ³ªÀÇ Å¥ ¼Ó¼º¿¡ Å¥¸¦ ¿©·¯°³ Ãß°¡°¡´É.
+				queueCreateInfo.queueCount = 1;	// í•˜ë‚˜ì˜ í ì†ì„±ì— íë¥¼ ì—¬ëŸ¬ê°œ ì¶”ê°€ê°€ëŠ¥.
 				queueCreateInfo.pQueuePriorities = &defaultQueuePriority;
 				break;
 			}
@@ -172,7 +172,7 @@ VkResult JFFramework::JFVulkanDevice::CreateDevice()
 
 		VK_CHECK_RESULT(vkCreateDevice(pd, &deviceInfo, NULL, &device));
 
-		// Queue´Â vkCreateDevice·Î ³í¸®Àû ÀåÄ¡ °³Ã¼°¡ »ı¼ºµÉ ¶§ ¹¬½ÃÀûÀ¸·Î »ı¼ºµË´Ï´Ù.
+		// QueueëŠ” vkCreateDeviceë¡œ ë…¼ë¦¬ì  ì¥ì¹˜ ê°œì²´ê°€ ìƒì„±ë  ë•Œ ë¬µì‹œì ìœ¼ë¡œ ìƒì„±ë©ë‹ˆë‹¤.
 		vkGetDeviceQueue(device, graphicsQueueIndex, 0, &queue);
 		//vkDeviceWaitIdle(device);
 

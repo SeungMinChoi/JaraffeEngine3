@@ -2,7 +2,7 @@
 
 #include "../JFInclude.h"
 
-// Loggin System ¸¸µé±â Àü±îÁö ÀÓ½Ã
+// Loggin System ì¼ë‹¨ ì„ì‹œ
 namespace JFFoundation
 {
 	JF_API void JFLog(const char* fmt, ...);

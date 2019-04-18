@@ -5,21 +5,21 @@
 
 namespace Framework
 {
-	// Windows ±âÁØÀ¸·Î ¾Æ·¡ ·¹Áö½ºÆ®¸®¿¡¼­ Layer¸ñ·ÏÀ» °¡Á®¿È (json ÇüÅÂÀÓ)
+	// Windows ê¸°ì¤€ìœ¼ë¡œ ì•„ëž˜ ë ˆì§€ìŠ¤íŠ¸ë¦¬ì—ì„œ Layerëª©ë¡ì„ ê°€ì ¸ì˜´ (json í˜•íƒœìž„)
 	//HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\Vulkan\ExplicitLayers
 	//HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\Vulkan\ImplicitLayers
 
-	// Layer °Ë»ç´Â °³¹ß ´Ü°è¿¡¼­ »ç¿ëÇÏ°í ¸±¸®Áö¶§´Â Á¦°ÅÇØ¼­ À¯È¿¼º °Ë»ç ºñ¿ëÀ» ÁÙÀÏ¼ö ÀÖÀ½
-	// TODO : ¿©±â ÀÏ´Ü ´ëÃæ... ÁÁÀº ¾ÆÀÌµð¾î »ý°¢³ª¸é °íÃÄ¾ßÇÔ. 
-	// -> ÇöÀç µð¹ÙÀÌ½ºµéÀÌ Áö¿øÇÏ´Â layer, extentsion¸®½ºÆ®°¡ ÂÓ³ª¿À°í ±×°É ¼±ÅÃÇØ¼­ °í¸¦ ¼ö ÀÖ°ÔÇÏ´Â ÅøÀÌ ÀÖÀ¸¸é ÁÁÀ»µí. ±×°Å ÀúÀåÇØ³õ°í
+	// Layer ê²€ì‚¬ëŠ” ê°œë°œ ë‹¨ê³„ì—ì„œ ì‚¬ìš©í•˜ê³  ë¦´ë¦¬ì§€ë•ŒëŠ” ì œê±°í•´ì„œ ìœ íš¨ì„± ê²€ì‚¬ ë¹„ìš©ì„ ì¤„ì¼ìˆ˜ ìžˆìŒ
+	// TODO : ì—¬ê¸° ì¼ë‹¨ ëŒ€ì¶©... ì¢‹ì€ ì•„ì´ë””ì–´ ìƒê°ë‚˜ë©´ ê³ ì³ì•¼í•¨. 
+	// -> í˜„ìž¬ ë””ë°”ì´ìŠ¤ë“¤ì´ ì§€ì›í•˜ëŠ” layer, extentsionë¦¬ìŠ¤íŠ¸ê°€ ì«™ë‚˜ì˜¤ê³  ê·¸ê±¸ ì„ íƒí•´ì„œ ê³ ë¥¼ ìˆ˜ ìžˆê²Œí•˜ëŠ” íˆ´ì´ ìžˆìœ¼ë©´ ì¢‹ì„ë“¯. ê·¸ê±° ì €ìž¥í•´ë†“ê³ 
 	class JFVulkanLayerChecker
 	{
 	public:
 		static bool CheckLayer(JFFoundation::JFArray<const char*> layers);
 
-		// È®ÀåÆÇ¿¡´Â 2°¡Áö ¹öÀüÀÌ ÀÖ½À´Ï´Ù.
-		// 1. ÀÎ½ºÅÏ½º ±â¹Ý : ¾î¶² ÀåÄ¡¿Íµµ µ¶¸³ÀûÀÎ Àü¿ª ±â´ÉÀ¸·Î ¾î¶² VkDevice ¾øÀÌµµ ¾×¼¼½º °¡´É.
-		// 2. ÀåÄ¡ ±â¹Ý : ÀÌ È®ÀåÆÇÀº ÀåÄ¡¿¡ Æ¯º°È÷ ÇÑÁ¤µÅ ÀÖ¾î Æ¯¼ö ±â´ÉÀ» Á¶ÀÛÇÏ°í ÀÀ¿ë ÇÁ·Î±×·¥¿¡ Á¦°øÇÏ·Á¸é ÀåÄ¡¿¡ À¯È¿ÇÑ ÇÚµéÀÌ ÇÊ¿ä.
+		// í™•ìž¥íŒì—ëŠ” 2ê°€ì§€ ë²„ì „ì´ ìžˆìŠµë‹ˆë‹¤.
+		// 1. ì¸ìŠ¤í„´ìŠ¤ ê¸°ë°˜ : ì–´ë–¤ ìž¥ì¹˜ì™€ë„ ë…ë¦½ì ì¸ ì „ì—­ ê¸°ëŠ¥ìœ¼ë¡œ ì–´ë–¤ VkDevice ì—†ì´ë„ ì•¡ì„¸ìŠ¤ ê°€ëŠ¥.
+		// 2. ìž¥ì¹˜ ê¸°ë°˜ : ì´ í™•ìž¥íŒì€ ìž¥ì¹˜ì— íŠ¹ë³„ížˆ í•œì •ë¼ ìžˆì–´ íŠ¹ìˆ˜ ê¸°ëŠ¥ì„ ì¡°ìž‘í•˜ê³  ì‘ìš© í”„ë¡œê·¸ëž¨ì— ì œê³µí•˜ë ¤ë©´ ìž¥ì¹˜ì— ìœ íš¨í•œ í•¸ë“¤ì´ í•„ìš”.
 		static bool CheckInstanceExtension(JFFoundation::JFArray<const char*> extensions);
 		static bool CheckDeviceExtension(VkPhysicalDevice* device, JFFoundation::JFArray<const char*> extensions);
 	private:
