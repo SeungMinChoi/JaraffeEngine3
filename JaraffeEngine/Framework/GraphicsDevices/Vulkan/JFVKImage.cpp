@@ -87,6 +87,7 @@ JFFramework::JFVKImage::JFVKImage(JFVKDevice* _device)
 
 JFFramework::JFVKImage::~JFVKImage()
 {
+	vkDestroyImageView(device->device, view, NULL);
 	vkDestroyImage(device->device, image, nullptr);
 	vkFreeMemory(device->device, memory, NULL);
 }
