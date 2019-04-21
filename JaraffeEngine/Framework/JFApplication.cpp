@@ -16,6 +16,8 @@ JFFramework::JFApplication::JFApplication()
 
 JFFramework::JFApplication::~JFApplication()
 {
+	window->Destroy();
+
 	if (graphicsDevice)
 	{
 		delete graphicsDevice;
@@ -27,8 +29,6 @@ JFFramework::JFApplication::~JFApplication()
 		delete window;
 		window = nullptr;
 	}
-
-	window->Destroy();
 }
 
 void JFFramework::JFApplication::Run()

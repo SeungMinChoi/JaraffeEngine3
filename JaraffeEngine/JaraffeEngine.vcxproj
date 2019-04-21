@@ -180,6 +180,7 @@
     <ClInclude Include="Foundation\JFLog.h" />
     <ClInclude Include="Foundation\JFMath.h" />
     <ClInclude Include="Foundation\JFObject.h" />
+    <ClInclude Include="Foundation\JFRefCounter.h" />
     <ClInclude Include="Foundation\JFSort.h" />
     <ClInclude Include="Foundation\JFString.h" />
     <ClInclude Include="Foundation\JFStringW.h" />

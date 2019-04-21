@@ -67,6 +67,7 @@
     <ClInclude Include="Framework\JFMatrix4.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanSwapChain.h" />
     <ClInclude Include="Foundation\JFString.h" />
+    <ClInclude Include="Foundation\JFRefCounter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">

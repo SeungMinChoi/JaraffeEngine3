@@ -1,5 +1,4 @@
 #include "JFVulkanSwapChain.h"
-#include "JFVulkanInclude.h"
 #include "JFVulkanDevice.h"
 #include "JFVulkanTools.h"
 
