@@ -97,6 +97,9 @@ namespace JFFoundation
 
 				delete target;
 				delete refCounter;
+
+				target = nullptr;
+				refCounter = nullptr;
 			}
 		}
 

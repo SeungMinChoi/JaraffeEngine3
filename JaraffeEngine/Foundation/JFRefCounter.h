@@ -6,7 +6,7 @@ namespace JFFoundation
 	{
 	public:
 		JFRefCounter()
-			: count(0)
+			: count(1)
 		{}
 
 		void AddRef()
