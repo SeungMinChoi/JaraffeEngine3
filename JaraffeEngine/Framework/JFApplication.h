@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../JFInclude.h"
+#include "../JFFoundation.h"
+
+using namespace JFFoundation;
 
 namespace JFFramework
 {
@@ -21,9 +24,10 @@ namespace JFFramework
 
 		void Render();
 
-		void _SetupConsole();
+		void SetupConsole();
+		void DestroyConsole();
 
-		JFWindow* window;
-		JFGraphicsDevice* graphicsDevice;
+		JFObject<JFWindow> window;
+		JFObject<JFGraphicsDevice> graphicsDevice;
 	};
 }

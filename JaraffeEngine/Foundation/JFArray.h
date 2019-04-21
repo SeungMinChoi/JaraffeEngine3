@@ -75,21 +75,21 @@ namespace JFFoundation
 
 		size_t Add(const VALUE& v)
 		{
-			_AddSize(1);
+			AddSize(1);
 			new(std::addressof(data[count])) VALUE(v);
 			return count++;
 		}
 
 		size_t Add(VALUE&& v) noexcept
 		{
-			_AddSize(1);
+			AddSize(1);
 			new(std::addressof(data[count])) VALUE(std::move(v));
 			return count++;
 		}
 
 		size_t Add(size_t s, const VALUE& v)
 		{
-			_AddSize(s);
+			AddSize(s);
 			for (size_t i = 0; i < s; ++i)
 				new(std::addressof(data[count++])) VALUE(v);
 			return count;
@@ -174,7 +174,7 @@ namespace JFFoundation
 		}
 	
 	private:
-		void _AddSize(size_t s)
+		void AddSize(size_t s)
 		{
 			if (capacity >= (count + s))
 				return;

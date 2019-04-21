@@ -5,30 +5,17 @@
 #include "GraphicsDevices/JFGraphicsDevice.h"
 
 JFFramework::JFApplication::JFApplication()
+	: window(new JFWindow())
+	, graphicsDevice(new JFGraphicsDevice())
 {
-	_SetupConsole();
-
-	window = new JFWindow();
-	graphicsDevice = new JFGraphicsDevice();
-
+	SetupConsole();
 	window->Create();
 }
 
 JFFramework::JFApplication::~JFApplication()
 {
 	window->Destroy();
-
-	if (graphicsDevice)
-	{
-		delete graphicsDevice;
-		graphicsDevice = nullptr;
-	}
-
-	if (window)
-	{
-		delete window;
-		window = nullptr;
-	}
+	DestroyConsole();
 }
 
 void JFFramework::JFApplication::Run()
@@ -52,7 +39,7 @@ void JFFramework::JFApplication::Render()
 }
 
 
-void JFFramework::JFApplication::_SetupConsole()
+void JFFramework::JFApplication::SetupConsole()
 {
 #if defined(_WIN32)
 	//// 콘솔창 생성
@@ -76,4 +63,9 @@ void JFFramework::JFApplication::_SetupConsole()
 	//freopen_s(&stream, "CONOUT$", "w+", stderr);
 	SetConsoleTitle("hi");
 #endif
+}
+
+void JFFramework::JFApplication::DestroyConsole()
+{
+	FreeConsole();
 }

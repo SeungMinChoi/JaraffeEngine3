@@ -1,12 +1,13 @@
 #pragma once
 
+#include "../JFInclude.h"
 #include "JFRefCounter.h"
 
 namespace JFFoundation
 {
 	// TODO :ref count 만들어야함
 	template <typename T>
-	class JFObject
+	class JF_API JFObject
 	{
 	public:
 		JFObject(T* p = nullptr)
@@ -59,6 +60,7 @@ namespace JFFoundation
 			}
 
 			target = obj;
+
 			return *this;
 		}
 		JFObject& operator = (const JFObject& obj)
@@ -68,6 +70,8 @@ namespace JFFoundation
 
 			target = obj.target;
 			refCounter = obj.refCounter;
+			
+			return *this;
 		}
 		JFObject& operator = (JFObject&& obj) noexcept
 		{
