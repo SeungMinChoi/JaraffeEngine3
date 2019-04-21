@@ -10,3 +10,10 @@ namespace JFEngine
 }
 
 using namespace JFEngine;
+
+struct EngineVersion
+{
+	enum { Major = 3 };
+	enum { Minor = 1 };
+	enum { Patch = 0 };
+};

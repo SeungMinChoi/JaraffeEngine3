@@ -188,6 +188,8 @@
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanDebug.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanInclude.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanLayerChecker.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanMemory.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanSurface.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanSwapChain.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanTools.h" />
     <ClInclude Include="Framework\JFApplication.h" />
@@ -215,6 +217,7 @@
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanDevice.cpp" />
     <ClCompile Include="Foundation\JFAllocator.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanLayerChecker.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanSurface.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanSwapChain.cpp" />
     <ClCompile Include="Framework\JFApplication.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\JFGraphicsDevice.cpp" />

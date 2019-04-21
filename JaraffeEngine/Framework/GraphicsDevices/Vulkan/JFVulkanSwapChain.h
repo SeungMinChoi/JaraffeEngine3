@@ -1,26 +1,18 @@
 #pragma once
 
 #include "JFVulkanInclude.h"
-#include "../../../JFFoundation.h"
-
-using namespace JFFoundation;
 
 namespace JFFramework
 {
-	class JFWindow;
 	class JFVulkanDevice;
+	class JFVulkanSurface;
 	class JFVulkanSwapChain
 	{
 	public:
-		JFVulkanSwapChain(JFWindow* window, JFVulkanDevice* device);
+		JFVulkanSwapChain(JFVulkanDevice* device, JFVulkanSurface* surface);
 		~JFVulkanSwapChain();
 
 	private:
-		void InitSurface();
-
-		VkSurfaceKHR surface;
-
-		JFObject<JFWindow> window;
-		JFObject<JFVulkanDevice> device;
+		VkSwapchainKHR swapChain;
 	};
 }

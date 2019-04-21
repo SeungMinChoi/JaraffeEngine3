@@ -68,6 +68,8 @@
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanSwapChain.h" />
     <ClInclude Include="Foundation\JFString.h" />
     <ClInclude Include="Foundation\JFRefCounter.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanSurface.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVulkanMemory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
@@ -100,5 +102,6 @@
     <ClCompile Include="Framework\JFMatrix4.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanSwapChain.cpp" />
     <ClCompile Include="Foundation\JFString.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVulkanSurface.cpp" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
-﻿#include "../../JFInclude.h"
-#include "JFVulkanDevice.h"
+﻿#include "JFVulkanDevice.h"
 
-#include "../../JFFoundation.h"
+#include "../../../JFEngine.h"
 
 #include "JFVulkanTools.h"
 #include "JFVulkanLayerChecker.h"
@@ -73,7 +72,7 @@ VkResult JFFramework::JFVulkanDevice::CreateInstance()
 	appInfo.pApplicationName = JFENGINE_NAME;
 	appInfo.applicationVersion = 1;
 	appInfo.pEngineName = JFENGINE_NAME;
-	appInfo.engineVersion = 1;
+	appInfo.engineVersion = VK_MAKE_VERSION(EngineVersion::Major, EngineVersion::Minor, EngineVersion::Patch);
 	appInfo.apiVersion = VK_API_VERSION_1_0;
 
 	VkInstanceCreateInfo instanceCreateInfo = {};
