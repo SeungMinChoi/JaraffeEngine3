@@ -1,6 +1,6 @@
 #pragma once
 
-#include "JFVulkanInclude.h"
+#include "JFVKInclude.h"
 #include "../../../JFFoundation.h"
 
 using namespace JFFoundation;
@@ -8,12 +8,12 @@ using namespace JFFoundation;
 namespace JFFramework
 {
 	class JFWindow;
-	class JFVulkanDevice;
-	class JFVulkanSurface
+	class JFVKDevice;
+	class JFVKSurface
 	{
 	public:
-		JFVulkanSurface(JFWindow* window, JFVulkanDevice* device);
-		~JFVulkanSurface();
+		JFVKSurface(JFWindow* window, JFVKDevice* device);
+		~JFVKSurface();
 
 		void Create();
 		void Destroy();
@@ -22,6 +22,6 @@ namespace JFFramework
 		VkSurfaceKHR surface;
 
 		JFObject<JFWindow> window;
-		JFObject<JFVulkanDevice> device;
+		JFObject<JFVKDevice> device;
 	};
 }

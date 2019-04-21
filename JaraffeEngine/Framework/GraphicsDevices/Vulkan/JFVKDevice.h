@@ -1,20 +1,27 @@
 #pragma once
 
-#include "JFVulkanInclude.h"
+#include "JFVKInclude.h"
 #include "../Interface/JFGraphicsDeviceInterface.h"
 
-#include "JFVulkanDebug.h"
+#include "JFVKDebug.h"
 
 namespace JFFramework
 {
-	class JFVulkanDevice : public JFGraphicsDeviceInterface
+	class JFVKDevice : public JFGraphicsDeviceInterface
 	{
 	public:
-		JFVulkanDevice();
-		~JFVulkanDevice();
+		JFVKDevice();
+		~JFVKDevice();
+
+		bool MemoryTypeFromProperties(uint32_t typeBits, VkFlags requirementsMask, uint32_t* typeIndex);
 
 		VkDevice device;
 		VkInstance instance;
+
+		VkQueue queue;
+		uint32_t queueFamilyCount;
+		uint32_t graphicsQueueIndex;
+		uint32_t graphicsQueueWithPresentIndex;
 
 	private:
 		VkResult CreateInstance();
@@ -28,13 +35,8 @@ namespace JFFramework
 		VkPhysicalDeviceProperties deviceProperties;
 		VkPhysicalDeviceMemoryProperties memoryProperties;
 
-		VkQueue queue;
-		uint32_t queueFamilyCount;
-		uint32_t graphicsQueueIndex;
-		uint32_t graphicsQueueWithPresentIndex;
-
 #ifdef VK_VALIDATION
-		JFVulkanDebug debug;
+		JFVKDebug debug;
 #endif
 	};
 }

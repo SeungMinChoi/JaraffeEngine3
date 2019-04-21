@@ -1,10 +1,10 @@
 #pragma once
 
-#include "JFVulkanInclude.h"
+#include "JFVKInclude.h"
 
 namespace JFFramework
 {
-	class JFVulkanDebug
+	class JFVKDebug
 	{
 	public:
 		void Setup(VkInstance inst);

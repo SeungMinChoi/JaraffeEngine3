@@ -1,6 +1,6 @@
 #pragma once
 
-#include "JFVulkanInclude.h"
+#include "JFVKInclude.h"
 #include "../../../JFFoundation.h"
 
 using namespace JFFoundation;
@@ -22,27 +22,22 @@ namespace JFFramework
 	// 제출 방식
 	// - 단일 큐 : 여러 개의 커맨드 버퍼는 실행되거나 중첩가능. 각명령의 순서와 표준에서 정의된 API실행 순서에 따라 수행돼야 한다.
 	// - 복수 큐 : 특별한 순서 없이 실행된다. 순서 지정은 세마포어 나 펜스를 통한 동기화를 통해서만 가능하다.
-	class JFVulkanDevice;
-	class JFCommandBuffer
+	class JFVKDevice;
+	class JFVKCommandBuffer
 	{
 	public:
-		JFCommandBuffer(JFVulkanDevice* device);
-		~JFCommandBuffer();
-
-		void Alloc();
+		JFVKCommandBuffer(JFVKDevice* device);
+		~JFVKCommandBuffer();
 
 		// Begine과 End사이의 명령들을 레코딩, Submit으로 제출.
-		void Begin();
+		JFArray<VkCommandBuffer>& Begin(size_t count);
 		void End();
-		void Submit(const VkQueue& queue, const VkFence& fence);
-
-		void Reset();
-		void Free();
+		void Submit(const VkFence& fence = VK_NULL_HANDLE);
 
 	private:
-		JFObject<JFVulkanDevice> device;
+		JFObject<JFVKDevice> device;
 
-		VkCommandPool cmdPool; // 요거 어찌 사용할지 고민..
-		JFFoundation::JFArray<VkCommandBuffer> buffers;
+		VkCommandPool commandPool;
+		JFArray<VkCommandBuffer> buffers;
 	};
 }

@@ -1,9 +1,10 @@
-#include "JFVulkanCommandBuffer.h"
-#include "JFVulkanDevice.h"
-#include "JFVulkanTools.h"
+#include "JFVKCommandBuffer.h"
+#include "JFVKDevice.h"
+#include "JFVKTools.h"
 
-JFFramework::JFCommandBuffer::JFCommandBuffer(JFVulkanDevice* _device)
+JFFramework::JFVKCommandBuffer::JFVKCommandBuffer(JFVKDevice* _device)
 	: device(_device)
+	, commandPool(VK_NULL_HANDLE)
 {
 	// commandpool 생성.
 	VkCommandPoolCreateInfo cmdPoolInfo = {};
@@ -17,33 +18,38 @@ JFFramework::JFCommandBuffer::JFCommandBuffer(JFVulkanDevice* _device)
 	//    - 명시적 : vkResetCommandBuffer
 	//    - 암묵적 : vkBeginCommandBuffer
 	cmdPoolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	
-	// 커맨드 버퍼가 제출될 큐 패밀리 지정 ( 일단 임시값 )
-	cmdPoolInfo.queueFamilyIndex = 0;
+	cmdPoolInfo.queueFamilyIndex = device->graphicsQueueIndex;
 
-	VK_CHECK_RESULT(vkCreateCommandPool(device->device, &cmdPoolInfo, nullptr, &cmdPool));
+	VK_CHECK_RESULT(vkCreateCommandPool(device->device, &cmdPoolInfo, nullptr, &commandPool));
 }
 
-JFFramework::JFCommandBuffer::~JFCommandBuffer()
+JFFramework::JFVKCommandBuffer::~JFVKCommandBuffer()
 {
-	vkDestroyCommandPool(device->device, cmdPool, nullptr);
+	vkFreeCommandBuffers(device->device, commandPool, (uint32_t)buffers.Count(), buffers.Data());
+	vkDestroyCommandPool(device->device, commandPool, nullptr);
 }
 
-void JFFramework::JFCommandBuffer::Alloc()
+JFArray<VkCommandBuffer>& JFFramework::JFVKCommandBuffer::Begin(size_t count)
 {
+	// 할당 요청한 개수를 초과해서 가지고 있다면 pool에 반환합니다.
+	for (size_t i = buffers.Count(); i < count; ++i)
+	{
+		// VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT = 커맨드 버퍼가 보유한 메모리가 커맨드 풀로 반환된다는 뜻.
+		VK_CHECK_RESULT(vkResetCommandBuffer(buffers[i], VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT));
+	}
+	buffers.Resize(count);
+
 	// CommandPool로 부터 CommandBuffer할당 ( 일단 이렇게 )
 	VkCommandBufferAllocateInfo cmdInfo = {};
 	cmdInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	cmdInfo.pNext = nullptr;
-	cmdInfo.commandPool = cmdPool;
+	cmdInfo.commandPool = commandPool;
 	cmdInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	cmdInfo.commandBufferCount = buffers.Count();
+	cmdInfo.commandBufferCount = (uint32_t)count;
 
 	VK_CHECK_RESULT(vkAllocateCommandBuffers(device->device, &cmdInfo, buffers.Data()));
-}
 
-void JFFramework::JFCommandBuffer::Begin()
-{
+	// Begin
 	VkCommandBufferInheritanceInfo cmdBufInheritInfo = {};
 	cmdBufInheritInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
 	cmdBufInheritInfo.pNext = NULL;
@@ -60,21 +66,23 @@ void JFFramework::JFCommandBuffer::Begin()
 	cmdBufInfo.flags = 0;
 	cmdBufInfo.pInheritanceInfo = &cmdBufInheritInfo;
 
-	for (auto cmdbuf : buffers)
+	for (auto buf : buffers)
 	{
-		VK_CHECK_RESULT(vkBeginCommandBuffer(cmdbuf, &cmdBufInfo));
+		VK_CHECK_RESULT(vkBeginCommandBuffer(buf, &cmdBufInfo));
 	}
+
+	return buffers;
 }
 
-void JFFramework::JFCommandBuffer::End()
+void JFFramework::JFVKCommandBuffer::End()
 {
-	for (auto cmdbuf : buffers)
+	for (auto buf : buffers)
 	{
-		VK_CHECK_RESULT(vkEndCommandBuffer(cmdbuf));
+		VK_CHECK_RESULT(vkEndCommandBuffer(buf));
 	}
 }
 
-void JFFramework::JFCommandBuffer::Submit(const VkQueue& queue, const VkFence& fence)
+void JFFramework::JFVKCommandBuffer::Submit(const VkFence& fence)
 {
 	// Otherwise, create the submit information with specified buffer commands
 	VkSubmitInfo submitInfo = {};
@@ -83,32 +91,14 @@ void JFFramework::JFCommandBuffer::Submit(const VkQueue& queue, const VkFence& f
 	submitInfo.waitSemaphoreCount = 0;
 	submitInfo.pWaitSemaphores = NULL;
 	submitInfo.pWaitDstStageMask = NULL;
-	submitInfo.commandBufferCount = buffers.Count;
+	submitInfo.commandBufferCount = (uint32_t)buffers.Count();
 	submitInfo.pCommandBuffers = buffers.Data();
 	submitInfo.signalSemaphoreCount = 0;
 	submitInfo.pSignalSemaphores = NULL;
 
 	// queue에 제출.
-	VK_CHECK_RESULT(vkQueueSubmit(queue, 1, &submitInfo, fence));
+	VK_CHECK_RESULT(vkQueueSubmit(device->queue, 1, &submitInfo, fence));
 
 	// 완료 될때까지 기다림.
-	VK_CHECK_RESULT(vkQueueWaitIdle(queue));
-}
-
-void JFFramework::JFCommandBuffer::Reset()
-{
-	vkResetCommandPool(device->device, cmdPool, VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT);
-
-	//for (auto cmdbuf : buffers)
-	//{
-	//	// VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT = 커맨드 버퍼가 보유한 메모리가 커맨드 풀로 반환된다는 뜻.
-	//	VK_CHECK_RESULT(vkResetCommandBuffer(cmdbuf, VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT));
-	//}
-	buffers.Clear();
-}
-
-void JFFramework::JFCommandBuffer::Free()
-{
-	vkFreeCommandBuffers(device->device, cmdPool, buffers.Count(), buffers.Data());
-	buffers.Clear();
+	VK_CHECK_RESULT(vkQueueWaitIdle(device->queue));
 }

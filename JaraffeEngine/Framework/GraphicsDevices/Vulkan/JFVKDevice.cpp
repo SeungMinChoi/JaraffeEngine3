@@ -1,14 +1,18 @@
-﻿#include "JFVulkanDevice.h"
+﻿#include "JFVKDevice.h"
 
 #include "../../../JFEngine.h"
 
-#include "JFVulkanTools.h"
-#include "JFVulkanLayerChecker.h"
+#include "JFVKTools.h"
+#include "JFVKLayerChecker.h"
 
 using namespace JFFramework;
 using namespace JFFoundation;
 
-JFFramework::JFVulkanDevice::JFVulkanDevice()
+JFFramework::JFVKDevice::JFVKDevice()
+	: device(VK_NULL_HANDLE)
+	, instance(VK_NULL_HANDLE)
+	, queue(VK_NULL_HANDLE)
+	, physicalDevice(nullptr)
 {
 	VK_CHECK_RESULT(CreateInstance());
 	VK_CHECK_RESULT(CreateDevice());
@@ -18,7 +22,7 @@ JFFramework::JFVulkanDevice::JFVulkanDevice()
 #endif
 }
 
-JFFramework::JFVulkanDevice::~JFVulkanDevice()
+JFFramework::JFVKDevice::~JFVKDevice()
 {
 #ifdef VK_VALIDATION
 	debug.Free(instance);
@@ -28,7 +32,28 @@ JFFramework::JFVulkanDevice::~JFVulkanDevice()
 	DestroyInstance();
 }
 
-VkResult JFFramework::JFVulkanDevice::CreateInstance()
+bool JFFramework::JFVKDevice::MemoryTypeFromProperties(uint32_t typeBits, VkFlags requirementsMask, uint32_t * typeIndex)
+{
+	// Search memtypes to find first index with those properties
+	for (uint32_t i = 0; i < 32; i++)
+	{
+		if ((typeBits & 1) == 1)
+		{
+			// Type is available, does it match user properties?
+			if ((memoryProperties.memoryTypes[i].propertyFlags & requirementsMask) == requirementsMask)
+			{
+				*typeIndex = i;
+				return true;
+			}
+		}
+		typeBits >>= 1;
+	}
+
+	// No memory types matched, return failure
+	return false;
+}
+
+VkResult JFFramework::JFVKDevice::CreateInstance()
 {
 	JFArray<const char*> layerNames = { "VK_LAYER_LUNARG_standard_validation" };
 	// VK_LAYER_LUNARG_api_dump
@@ -56,12 +81,12 @@ VkResult JFFramework::JFVulkanDevice::CreateInstance()
 	instanceExtensions.Add(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
 #endif
 
-	if (Framework::JFVulkanLayerChecker::CheckLayer(layerNames) == false)
+	if (Framework::JFVKLayerChecker::CheckLayer(layerNames) == false)
 	{
 		JFLog("Layer validation not available!");
 	}
 	
-	if (Framework::JFVulkanLayerChecker::CheckInstanceExtension(instanceExtensions) == false)
+	if (Framework::JFVKLayerChecker::CheckInstanceExtension(instanceExtensions) == false)
 	{
 		JFLog("InstanceExtension validation not available!");
 	}
@@ -88,12 +113,12 @@ VkResult JFFramework::JFVulkanDevice::CreateInstance()
 	return vkCreateInstance(&instanceCreateInfo, nullptr, &instance);
 }
 
-void JFFramework::JFVulkanDevice::DestroyInstance()
+void JFFramework::JFVKDevice::DestroyInstance()
 {
 	vkDestroyInstance(instance, nullptr);
 }
 
-VkResult JFFramework::JFVulkanDevice::CreateDevice()
+VkResult JFFramework::JFVKDevice::CreateDevice()
 {
 	JFArray<const char*> layerNames = { "VK_LAYER_LUNARG_standard_validation" };
 	JFArray<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
@@ -115,7 +140,7 @@ VkResult JFFramework::JFVulkanDevice::CreateDevice()
 	//for (VkPhysicalDevice& pd : deviceList)
 	VkPhysicalDevice& pd = deviceList[0];
 	{
-		if (Framework::JFVulkanLayerChecker::CheckDeviceExtension(&pd, deviceExtensions) == false)
+		if (Framework::JFVKLayerChecker::CheckDeviceExtension(&pd, deviceExtensions) == false)
 		{
 			JFLog("Device extension validation not available!");
 		}
@@ -181,7 +206,7 @@ VkResult JFFramework::JFVulkanDevice::CreateDevice()
 	return VK_INCOMPLETE;
 }
 
-void JFFramework::JFVulkanDevice::DestroyDevice()
+void JFFramework::JFVKDevice::DestroyDevice()
 {
 	vkDestroyDevice(device, nullptr);
 }

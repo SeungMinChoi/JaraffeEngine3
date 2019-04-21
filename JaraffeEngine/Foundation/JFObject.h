@@ -12,13 +12,13 @@ namespace JFFoundation
 	public:
 		JFObject(T* p = nullptr)
 			: target(p)
-			, refCounter(new JFRefCounter)
+			, refCounter(nullptr)
 		{}
 		JFObject(const JFObject& obj)
 			: target(obj.target)
 			, refCounter(obj.refCounter)
 		{
-			refCounter->AddRef();
+			AddRef();
 		}
 		JFObject(JFObject&& obj) noexcept
 			: target(obj.target)
@@ -44,13 +44,14 @@ namespace JFFoundation
 
 		T* operator * (void)
 		{
-			return *target;
+			return target;
 		}
 		const T* operator * (void) const
 		{
-			return *target;
+			return target;
 		}
 
+		// JFObject Type인대 target만 넘긴다면 문제됨.
 		JFObject& operator = (const T* obj)
 		{
 			if (target != obj)
@@ -70,6 +71,7 @@ namespace JFFoundation
 
 			target = obj.target;
 			refCounter = obj.refCounter;
+			AddRef();
 			
 			return *this;
 		}
@@ -88,6 +90,17 @@ namespace JFFoundation
 		}
 
 	private:
+		void AddRef()
+		{
+			if (target == nullptr)
+				return;
+
+			if (refCounter == nullptr)
+				refCounter = new JFRefCounter;
+
+			refCounter->AddRef();
+		}
+
 		void Release()
 		{
 			if (refCounter->Release() == 0)

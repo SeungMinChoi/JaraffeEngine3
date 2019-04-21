@@ -1,5 +1,5 @@
 #include "../../../JFFoundation.h"
-#include "JFVulkanDebug.h"
+#include "JFVKDebug.h"
 
 namespace Private
 {
@@ -28,7 +28,7 @@ namespace Private
 	}
 }
 
-void JFFramework::JFVulkanDebug::Setup(VkInstance inst)
+void JFFramework::JFVKDebug::Setup(VkInstance inst)
 {
 	createDebugReportCallback = reinterpret_cast<PFN_vkCreateDebugReportCallbackEXT>(vkGetInstanceProcAddr(inst, "vkCreateDebugReportCallbackEXT"));
 	destroyDebugReportCallback = reinterpret_cast<PFN_vkDestroyDebugReportCallbackEXT>(vkGetInstanceProcAddr(inst, "vkDestroyDebugReportCallbackEXT"));
@@ -46,7 +46,7 @@ void JFFramework::JFVulkanDebug::Setup(VkInstance inst)
 	assert(!err);
 }
 
-void JFFramework::JFVulkanDebug::Free(VkInstance inst)
+void JFFramework::JFVKDebug::Free(VkInstance inst)
 {
 	if (msgCallback != VK_NULL_HANDLE)
 	{

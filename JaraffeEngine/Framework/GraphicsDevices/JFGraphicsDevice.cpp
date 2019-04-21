@@ -3,7 +3,7 @@
 #include "Interface/JFGraphicsDeviceInterface.h"
 
 #ifdef JF_VULKAN
-#	include "Vulkan/JFVulkanDevice.h"
+#	include "Vulkan/JFVKDevice.h"
 #endif
 
 namespace DeviceHelper
@@ -11,7 +11,7 @@ namespace DeviceHelper
 	static JFFramework::JFGraphicsDeviceInterface* CreateGraphicsAPI()
 	{
 #ifdef JF_VULKAN
-		return new JFFramework::JFVulkanDevice();
+		return new JFFramework::JFVKDevice();
 #else
 		return nullptr;
 #endif

@@ -1,8 +1,8 @@
-#include "JFVulkanLayerChecker.h"
+#include "JFVKLayerChecker.h"
 
 using namespace JFFoundation;
 
-bool Framework::JFVulkanLayerChecker::CheckLayer(JFFoundation::JFArray<const char*> layers)
+bool Framework::JFVKLayerChecker::CheckLayer(JFFoundation::JFArray<const char*> layers)
 {
 	if (layers.Count() <= 0)
 		return VK_SUCCESS;
@@ -31,7 +31,7 @@ bool Framework::JFVulkanLayerChecker::CheckLayer(JFFoundation::JFArray<const cha
 	return true;
 }
 
-bool Framework::JFVulkanLayerChecker::CheckInstanceExtension(JFFoundation::JFArray<const char*> extensions)
+bool Framework::JFVKLayerChecker::CheckInstanceExtension(JFFoundation::JFArray<const char*> extensions)
 {
 	if (extensions.Count() <= 0)
 		return VK_SUCCESS;
@@ -89,7 +89,7 @@ bool Framework::JFVulkanLayerChecker::CheckInstanceExtension(JFFoundation::JFArr
 	return true;
 }
 
-bool Framework::JFVulkanLayerChecker::CheckDeviceExtension(VkPhysicalDevice* device, JFFoundation::JFArray<const char*> extensions)
+bool Framework::JFVKLayerChecker::CheckDeviceExtension(VkPhysicalDevice* device, JFFoundation::JFArray<const char*> extensions)
 {
 	const JFArray<VkLayerProperties>& layerProperties = LayerProperties();
 
@@ -144,7 +144,7 @@ bool Framework::JFVulkanLayerChecker::CheckDeviceExtension(VkPhysicalDevice* dev
 	return true;
 }
 
-const JFArray<VkLayerProperties>& Framework::JFVulkanLayerChecker::LayerProperties()
+const JFArray<VkLayerProperties>& Framework::JFVKLayerChecker::LayerProperties()
 {
 	auto getLayers = []() -> JFArray<VkLayerProperties>
 	{

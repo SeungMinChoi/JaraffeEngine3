@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../../JFFoundation.h"
-#include "JFVulkanInclude.h"
+#include "JFVKInclude.h"
 
 namespace Framework
 {
@@ -12,7 +12,7 @@ namespace Framework
 	// Layer 검사는 개발 단계에서 사용하고 릴리지때는 제거해서 유효성 검사 비용을 줄일수 있음
 	// TODO : 여기 일단 대충... 좋은 아이디어 생각나면 고쳐야함. 
 	// -> 현재 디바이스들이 지원하는 layer, extentsion리스트가 쫙나오고 그걸 선택해서 고를 수 있게하는 툴이 있으면 좋을듯. 그거 저장해놓고
-	class JFVulkanLayerChecker
+	class JFVKLayerChecker
 	{
 	public:
 		static bool CheckLayer(JFFoundation::JFArray<const char*> layers);

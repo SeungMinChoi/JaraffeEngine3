@@ -1,18 +1,19 @@
-#include "JFVulkanSurface.h"
-#include "JFVulkanDevice.h"
-#include "JFVulkanTools.h"
+#include "JFVKSurface.h"
+#include "JFVKDevice.h"
+#include "JFVKTools.h"
 
 #include "../../Platform/JFWindow.h"
 
-JFFramework::JFVulkanSurface::JFVulkanSurface(JFWindow* _window, JFVulkanDevice* _device)
+JFFramework::JFVKSurface::JFVKSurface(JFWindow* _window, JFVKDevice* _device)
 	: window(_window)
 	, device(_device)
+	, surface(VK_NULL_HANDLE)
 {}
 
-JFFramework::JFVulkanSurface::~JFVulkanSurface()
+JFFramework::JFVKSurface::~JFVKSurface()
 {}
 
-void JFFramework::JFVulkanSurface::Create()
+void JFFramework::JFVKSurface::Create()
 {
 #if defined(_WIN32)
 	VkWin32SurfaceCreateInfoKHR surfaceCreateInfo = {};
@@ -23,7 +24,7 @@ void JFFramework::JFVulkanSurface::Create()
 #endif
 }
 
-void JFFramework::JFVulkanSurface::Destroy()
+void JFFramework::JFVKSurface::Destroy()
 {
 	vkDestroySurfaceKHR(device->instance, surface, nullptr);
 }
