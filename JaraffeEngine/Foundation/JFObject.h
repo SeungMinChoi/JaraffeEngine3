@@ -108,6 +108,7 @@ namespace JFFoundation
 				assert(target);
 				assert(refCounter);
 
+				// 이 부분을 따로 빼야함. ( 전방선언이 안먹힘 )
 				delete target;
 				delete refCounter;
 

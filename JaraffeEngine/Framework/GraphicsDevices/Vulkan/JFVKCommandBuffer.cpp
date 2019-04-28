@@ -1,5 +1,4 @@
 #include "JFVKCommandBuffer.h"
-#include "JFVKDevice.h"
 #include "JFVKTools.h"
 
 JFFramework::JFVKCommandBuffer::JFVKCommandBuffer(JFVKDevice* _device)

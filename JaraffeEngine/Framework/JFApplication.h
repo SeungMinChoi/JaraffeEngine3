@@ -2,13 +2,13 @@
 
 #include "../JFInclude.h"
 #include "../JFFoundation.h"
+#include "Platform/JFWindow.h"
+#include "GraphicsDevices/JFGraphicsDevice.h"
 
 using namespace JFFoundation;
 
 namespace JFFramework
 {
-	class JFWindow;
-	class JFGraphicsDevice;
 	class JF_API JFApplication
 	{
 	public:

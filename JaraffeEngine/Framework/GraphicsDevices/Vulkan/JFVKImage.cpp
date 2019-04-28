@@ -1,5 +1,5 @@
 #include "JFVKImage.h"
-#include "JFVKDevice.h"
+
 #include "JFVKTools.h"
 #include "JFVKCommandBuffer.h"
 

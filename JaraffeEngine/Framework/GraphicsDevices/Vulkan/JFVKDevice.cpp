@@ -1,7 +1,5 @@
 ﻿#include "JFVKDevice.h"
 
-#include "../../../JFEngine.h"
-
 #include "JFVKTools.h"
 #include "JFVKLayerChecker.h"
 
@@ -154,7 +152,7 @@ VkResult JFFramework::JFVKDevice::CreateDevice()
 		// device Memory Info
 		vkGetPhysicalDeviceMemoryProperties(pd, &memoryProperties);
 
-		JFArray<VkQueueFamilyProperties> queueFamilyProps;
+		// Get QueueFamailyProps
 		{
 			vkGetPhysicalDeviceQueueFamilyProperties(pd, &queueFamilyCount, NULL);
 

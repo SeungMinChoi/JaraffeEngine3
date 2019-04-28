@@ -3,12 +3,13 @@
 #include "JFVKInclude.h"
 #include "../../../JFFoundation.h"
 
+#include "JFVKDevice.h"
+#include "../../Platform/JFWindow.h"
+
 using namespace JFFoundation;
 
 namespace JFFramework
 {
-	class JFWindow;
-	class JFVKDevice;
 	class JFVKSurface
 	{
 	public:
@@ -18,9 +19,9 @@ namespace JFFramework
 		void Create();
 		void Destroy();
 
-	private:
 		VkSurfaceKHR surface;
 
+	private:
 		JFObject<JFWindow> window;
 		JFObject<JFVKDevice> device;
 	};

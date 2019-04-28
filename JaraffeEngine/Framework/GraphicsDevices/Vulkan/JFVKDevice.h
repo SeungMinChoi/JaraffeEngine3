@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../../JFEngine.h"
+
 #include "JFVKInclude.h"
 #include "../Interface/JFGraphicsDeviceInterface.h"
 
@@ -22,6 +24,12 @@ namespace JFFramework
 		uint32_t queueFamilyCount;
 		uint32_t graphicsQueueIndex;
 		uint32_t graphicsQueueWithPresentIndex;
+		JFArray<VkQueueFamilyProperties> queueFamilyProps;
+
+		VkPhysicalDevice* physicalDevice;
+		VkPhysicalDeviceFeatures deviceFeatures;
+		VkPhysicalDeviceProperties deviceProperties;
+		VkPhysicalDeviceMemoryProperties memoryProperties;
 
 	private:
 		VkResult CreateInstance();
@@ -29,11 +37,6 @@ namespace JFFramework
 
 		VkResult CreateDevice();
 		void DestroyDevice();
-	
-		VkPhysicalDevice* physicalDevice;
-		VkPhysicalDeviceFeatures deviceFeatures;
-		VkPhysicalDeviceProperties deviceProperties;
-		VkPhysicalDeviceMemoryProperties memoryProperties;
 
 #ifdef VK_VALIDATION
 		JFVKDebug debug;

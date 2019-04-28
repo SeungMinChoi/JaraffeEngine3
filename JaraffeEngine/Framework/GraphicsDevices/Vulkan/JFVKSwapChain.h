@@ -1,6 +1,12 @@
 #pragma once
 
 #include "JFVKInclude.h"
+#include "../../../JFFoundation.h"
+
+#include "JFVKDevice.h"
+#include "JFVKSurface.h"
+
+using namespace JFFoundation;
 
 namespace JFFramework
 {
@@ -28,8 +34,6 @@ namespace JFFramework
 	// 14. 파이프라인 장벽 추가
 	// 15. 커맨드 버퍼 레코딩 종료
 	// 16. 깊이 이미지 뷰 생성
-	class JFVKDevice;
-	class JFVKSurface;
 	class JFVKSwapChain
 	{
 	public:
@@ -37,6 +41,12 @@ namespace JFFramework
 		~JFVKSwapChain();
 
 	private:
+		uint32_t PresentationSupportedQueueIndex();
+		VkFormat SupportedFormats();
+
 		VkSwapchainKHR swapChain;
+
+		JFObject<JFVKDevice> device;
+		JFObject<JFVKSurface> surface;
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "JFVKInclude.h"
+#include "JFVKDevice.h"
 #include "../../../JFFoundation.h"
 
 using namespace JFFoundation;
@@ -28,7 +29,6 @@ namespace JFFramework
 	//		- 할당된 메모리 바인딩
 	// 3. 이미지 레이아웃 설정
 	// 4. 이미지 뷰 생성. ( 이미지는 이미지 뷰를 통해서만 액세스 가능 )
-	class JFVKDevice;
 	class JFVKImage
 	{
 	public:

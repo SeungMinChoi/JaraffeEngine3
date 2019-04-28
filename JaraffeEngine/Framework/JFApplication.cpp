@@ -1,9 +1,6 @@
 #include "../JFInclude.h"
 #include "JFApplication.h"
 
-#include "Platform/JFWindow.h"
-#include "GraphicsDevices/JFGraphicsDevice.h"
-
 JFFramework::JFApplication::JFApplication()
 	: window(new JFWindow())
 	, graphicsDevice(new JFGraphicsDevice())

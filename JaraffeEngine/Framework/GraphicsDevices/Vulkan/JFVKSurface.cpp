@@ -1,8 +1,5 @@
 #include "JFVKSurface.h"
-#include "JFVKDevice.h"
 #include "JFVKTools.h"
-
-#include "../../Platform/JFWindow.h"
 
 JFFramework::JFVKSurface::JFVKSurface(JFWindow* _window, JFVKDevice* _device)
 	: window(_window)
