@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../JFSize.h"
+
 namespace JFFramework
 {
 	class JFWindow
@@ -12,6 +14,8 @@ namespace JFFramework
 		void Destroy();
 
 		void* Handle() const;
+
+		JFSize size;
 
 	private:
 		void* impl;

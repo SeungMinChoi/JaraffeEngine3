@@ -2,6 +2,8 @@
 
 namespace JFFramework
 {
+	class JFWindow;
+	class JFSwapChainInterface;
 	class JFGraphicsDeviceInterface;
 	class JFGraphicsDevice
 	{
@@ -9,7 +11,11 @@ namespace JFFramework
 		JFGraphicsDevice();
 		~JFGraphicsDevice();
 
+		void Create(JFWindow* window);
+		void Destroy();
+
 	private:
+		JFSwapChainInterface* swapChain;
 		JFGraphicsDeviceInterface* device;
 	};
 }

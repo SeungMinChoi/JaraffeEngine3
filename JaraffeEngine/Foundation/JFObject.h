@@ -28,25 +28,34 @@ namespace JFFoundation
 			obj.refCounter = nullptr;
 		}
 
-		~JFObject(void)
+		~JFObject() noexcept
 		{
 			Release();
 		}
 
-		T* operator -> (void)
+		T* operator -> ()
 		{
 			return target;
 		}
-		const T* operator -> (void) const
+		const T* operator -> () const
 		{
 			return target;
 		}
 
-		T* operator * (void)
+		T* operator * ()
 		{
 			return target;
 		}
-		const T* operator * (void) const
+		const T* operator * () const
+		{
+			return target;
+		}
+
+		operator T* ()
+		{
+			return target;
+		}
+		operator const T* () const
 		{
 			return target;
 		}

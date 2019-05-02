@@ -66,11 +66,13 @@
       <Filter>Framework\GraphicsDevice\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKMemory.h" />
-    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKSurface.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKSwapChain.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKTools.h">
       <Filter>Framework\GraphicsDevice\Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\JFSize.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Interface\JFSwapChainInterface.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKImageView.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
@@ -103,7 +105,8 @@
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKLayerChecker.cpp">
       <Filter>Framework\GraphicsDevice\Vulkan</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKSurface.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKSwapChain.cpp" />
+    <ClCompile Include="Framework\JFSize.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKImageView.cpp" />
   </ItemGroup>
 </Project>

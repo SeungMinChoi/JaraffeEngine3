@@ -39,6 +39,7 @@ using namespace JFFramework;
 using namespace JFFoundation;
 
 JFFramework::JFWindow::JFWindow()
+	: size(0)
 {
 	impl = new Private::Win32Impl();
 }
@@ -107,6 +108,11 @@ void JFFramework::JFWindow::Create()
 
 	auto win32 = reinterpret_cast<Private::Win32Impl*>(impl);
 	win32->hWnd = hWnd;
+
+	RECT rc;
+	GetWindowRect(hWnd, &rc);
+
+	size = JFSize((float)(rc.right - rc.left), (float)(rc.bottom - rc.top));
 
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0))

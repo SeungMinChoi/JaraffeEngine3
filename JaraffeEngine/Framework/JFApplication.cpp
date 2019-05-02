@@ -7,10 +7,12 @@ JFFramework::JFApplication::JFApplication()
 {
 	SetupConsole();
 	window->Create();
+	graphicsDevice->Create(window);
 }
 
 JFFramework::JFApplication::~JFApplication()
 {
+	graphicsDevice->Destroy();
 	window->Destroy();
 	DestroyConsole();
 }
