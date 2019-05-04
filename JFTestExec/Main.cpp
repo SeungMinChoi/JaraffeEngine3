@@ -7,6 +7,11 @@
 
 int main()
 {
+	JFThread t([]()
+	{
+		
+	});
+
 	JFApplication app;
 
 	JFVector2 v = JFVector2::Zero;

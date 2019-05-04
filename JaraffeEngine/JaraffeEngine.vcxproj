@@ -184,6 +184,7 @@
     <ClInclude Include="Foundation\JFSort.h" />
     <ClInclude Include="Foundation\JFString.h" />
     <ClInclude Include="Foundation\JFStringW.h" />
+    <ClInclude Include="Foundation\JFThread.h" />
     <ClInclude Include="Framework\GraphicsDevices\Interface\JFSwapChainInterface.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKCommandBuffer.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKDebug.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="Foundation\JFLog.cpp" />
     <ClCompile Include="Foundation\JFString.cpp" />
     <ClCompile Include="Foundation\JFStringW.cpp" />
+    <ClCompile Include="Foundation\JFThread.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKCommandBuffer.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKDebug.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKDevice.cpp" />

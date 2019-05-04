@@ -10,3 +10,5 @@ namespace JFFoundation {}
 #include "Foundation/JFLog.h"
 
 #include "Foundation/JFObject.h"
+
+#include "Foundation/JFThread.h"
