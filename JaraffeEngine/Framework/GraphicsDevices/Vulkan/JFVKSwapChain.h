@@ -29,8 +29,16 @@ namespace JFFramework
 		void SetupSupportedFormat();
 		void SetupSupportedPresentModes();
 		void SetupPresentMode();
+
 		void CreateColorImage();
 		void CreateColorImageView();
+
+		void CreateDepthImage();
+		void CreateDepthImageView();
+		void DestroyDepth();
+
+		bool MemoryTypeFromProperties(uint32_t typeBits, VkFlags requirementsMask, uint32_t* typeIndex);
+		void SetImageLayout(VkImage image, VkImageAspectFlags aspectMask, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, VkAccessFlagBits srcAccessMask, const VkCommandBuffer& cmdBuf);
 
 		uint32_t PresentationSupportedQueueIndex();
 
@@ -41,6 +49,11 @@ namespace JFFramework
 		VkSwapchainKHR swapChain = VK_NULL_HANDLE;
 		JFArray<VkImage> swapChainImages;
 		JFArray<VkImageView> swapChainImageViews;
+
+		VkFormat depthFormat = VK_FORMAT_UNDEFINED;
+		VkImage depthImage;
+		VkImageView depthImageView;
+		VkDeviceMemory depthMemory;
 
 		VkFormat format;
 		VkPresentModeKHR presentMode;

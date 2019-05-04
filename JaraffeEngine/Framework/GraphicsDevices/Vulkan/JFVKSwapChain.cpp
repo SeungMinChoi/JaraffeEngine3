@@ -1,5 +1,6 @@
 #include "JFVKSwapChain.h"
 #include "JFVKTools.h"
+#include "JFVKCommandBuffer.h"
 
 JFFramework::JFVKSwapChain::JFVKSwapChain(JFVKDevice* _device, JFWindow* _window)
 	: device(_device)
@@ -71,10 +72,22 @@ void JFFramework::JFVKSwapChain::CreateSwapChain()
 	SetupPresentMode();
 	CreateColorImage();
 	CreateColorImageView();
+
+	CreateDepthImage();
+	CreateDepthImageView();
 }
 
 void JFFramework::JFVKSwapChain::DestroySwapChain()
 {
+	DestroyDepth();
+
+	for (uint32_t i = 0; i < swapChainImageViews.Count(); ++i)
+	{
+		vkDestroyImageView(device->device, swapChainImageViews[i], NULL);
+	}
+	vkDestroySwapchainKHR(device->device, swapChain, NULL);
+
+	vkDestroySurfaceKHR(device->instance, surface, NULL);
 }
 
 void JFFramework::JFVKSwapChain::SetupSupportedFormat()
@@ -223,4 +236,187 @@ void JFFramework::JFVKSwapChain::CreateColorImageView()
 
 		VK_CHECK_RESULT(vkCreateImageView(device->device, &imgViewInfo, NULL, &swapChainImageViews[i]));
 	}
+}
+
+void JFFramework::JFVKSwapChain::CreateDepthImage()
+{
+	VkImageCreateInfo imageInfo = {};
+
+	// 깊이 포맷이 정의되지 않은 경우 16bit 값을 사용
+	if(depthFormat == VK_FORMAT_UNDEFINED)
+		depthFormat = VK_FORMAT_D16_UNORM;
+
+	VkFormatProperties props;
+	vkGetPhysicalDeviceFormatProperties(*device->physicalDevice, depthFormat, &props);
+	if (props.linearTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
+	{
+		imageInfo.tiling = VK_IMAGE_TILING_LINEAR;
+	}
+	else if (props.optimalTilingFeatures & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
+	{
+		imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+	}
+	else
+	{
+		// 원하는 depthBuffer tiling형식을 지원 못함
+		exit(-1);
+	}
+
+	imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	imageInfo.pNext = NULL;
+	imageInfo.imageType = VK_IMAGE_TYPE_2D;
+	imageInfo.format = depthFormat;
+	imageInfo.extent.width = (uint32_t)window->size.width;
+	imageInfo.extent.height = (uint32_t)window->size.height;
+	imageInfo.extent.depth = 1;
+	imageInfo.mipLevels = 1;
+	imageInfo.arrayLayers = 1;
+	imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	imageInfo.queueFamilyIndexCount = 0;
+	imageInfo.pQueueFamilyIndices = NULL;
+	imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	imageInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+	imageInfo.flags = 0;
+
+	VK_CHECK_RESULT(vkCreateImage(device->device, &imageInfo, NULL, &depthImage));
+}
+
+void JFFramework::JFVKSwapChain::CreateDepthImageView()
+{
+	VkMemoryRequirements memRqrmnt;
+	vkGetImageMemoryRequirements(device->device, depthImage, &memRqrmnt);
+
+	VkMemoryAllocateInfo memAlloc = {};
+	memAlloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	memAlloc.pNext = NULL;
+	memAlloc.allocationSize = 0;
+	memAlloc.memoryTypeIndex = 0;
+	memAlloc.allocationSize = memRqrmnt.size;
+	// Determine the type of memory required with the help of memory properties
+	assert(MemoryTypeFromProperties(memRqrmnt.memoryTypeBits, 0, &memAlloc.memoryTypeIndex));
+
+	// Allocate the memory for image objects
+	VK_CHECK_RESULT(vkAllocateMemory(device->device, &memAlloc, NULL, &depthMemory));
+
+	// Bind the allocated memeory
+	VK_CHECK_RESULT(vkBindImageMemory(device->device, depthImage, depthMemory, 0));
+
+	VkImageViewCreateInfo imgViewInfo = {};
+	imgViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+	imgViewInfo.pNext = NULL;
+	imgViewInfo.image = VK_NULL_HANDLE;
+	imgViewInfo.format = depthFormat;
+	imgViewInfo.components = { VK_COMPONENT_SWIZZLE_IDENTITY };
+	imgViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	imgViewInfo.subresourceRange.baseMipLevel = 0;
+	imgViewInfo.subresourceRange.levelCount = 1;
+	imgViewInfo.subresourceRange.baseArrayLayer = 0;
+	imgViewInfo.subresourceRange.layerCount = 1;
+	imgViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+	imgViewInfo.flags = 0;
+
+	if (depthFormat == VK_FORMAT_D16_UNORM_S8_UINT ||
+		depthFormat == VK_FORMAT_D24_UNORM_S8_UINT ||
+		depthFormat == VK_FORMAT_D32_SFLOAT_S8_UINT)
+	{
+		imgViewInfo.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+	}
+
+	// Use command buffer to create the depth image. This includes -
+	// Command buffer allocation, recording with begin/end scope and submission.
+	JFVKCommandBuffer cmd(device);
+	JFArray<VkCommandBuffer>& cmdBuffers = cmd.Begin(1);
+	{
+		// Set the image layout to depth stencil optimal
+		SetImageLayout(depthImage,
+					   imgViewInfo.subresourceRange.aspectMask,
+					   VK_IMAGE_LAYOUT_UNDEFINED,
+					   VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, (VkAccessFlagBits)0, cmdBuffers[0]);
+	}
+	cmd.End();
+	cmd.Submit();
+
+	// Create the image view and allow the application to use the images.
+	imgViewInfo.image = depthImage;
+	VK_CHECK_RESULT(vkCreateImageView(device->device, &imgViewInfo, NULL, &depthImageView));
+}
+
+void JFFramework::JFVKSwapChain::DestroyDepth()
+{
+	vkDestroyImageView(device->device, depthImageView, NULL);
+	vkDestroyImage(device->device, depthImage, NULL);
+	vkFreeMemory(device->device, depthMemory, NULL);
+}
+
+bool JFFramework::JFVKSwapChain::MemoryTypeFromProperties(uint32_t typeBits, VkFlags requirementsMask, uint32_t * typeIndex)
+{
+	// Search memtypes to find first index with those properties
+	for (uint32_t i = 0; i < 32; i++)
+	{
+		if ((typeBits & 1) == 1)
+		{
+			// Type is available, does it match user properties?
+			if ((device->memoryProperties.memoryTypes[i].propertyFlags & requirementsMask) == requirementsMask)
+			{
+				*typeIndex = i;
+				return true;
+			}
+		}
+		typeBits >>= 1;
+	}
+	// No memory types matched, return failure
+	return false;
+}
+
+void JFFramework::JFVKSwapChain::SetImageLayout(VkImage image, VkImageAspectFlags aspectMask, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, VkAccessFlagBits srcAccessMask, const VkCommandBuffer& cmdBuf)
+{
+	VkImageMemoryBarrier imgMemoryBarrier = {};
+	imgMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	imgMemoryBarrier.pNext = NULL;
+	imgMemoryBarrier.srcAccessMask = srcAccessMask;
+	imgMemoryBarrier.dstAccessMask = 0;
+	imgMemoryBarrier.oldLayout = oldImageLayout;
+	imgMemoryBarrier.newLayout = newImageLayout;
+	imgMemoryBarrier.image = image;
+	imgMemoryBarrier.subresourceRange.aspectMask = aspectMask;
+	imgMemoryBarrier.subresourceRange.baseMipLevel = 0;
+	imgMemoryBarrier.subresourceRange.levelCount = 1;
+	imgMemoryBarrier.subresourceRange.layerCount = 1;
+
+	if (oldImageLayout == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL)
+	{
+		imgMemoryBarrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+	}
+
+	switch (newImageLayout)
+	{
+		// Ensure that anything that was copying from this image has completed
+		// An image in this layout can only be used as the destination operand of the commands
+	case VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+	case VK_IMAGE_LAYOUT_PRESENT_SRC_KHR:
+		imgMemoryBarrier.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+		break;
+
+		// Ensure any Copy or CPU writes to image are flushed
+		// An image in this layout can only be used as a read-only shader resource
+	case VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+		imgMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
+		imgMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		break;
+
+		// An image in this layout can only be used as a framebuffer color attachment
+	case VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+		imgMemoryBarrier.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+		break;
+
+		// An image in this layout can only be used as a framebuffer depth/stencil attachment
+	case VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+		imgMemoryBarrier.dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+		break;
+	}
+
+	VkPipelineStageFlags srcStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+	VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+
+	vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &imgMemoryBarrier);
 }
