@@ -119,5 +119,6 @@
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKResource.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.cpp" />
     <ClCompile Include="Foundation\JFCondition.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKMemory.cpp" />
   </ItemGroup>
 </Project>

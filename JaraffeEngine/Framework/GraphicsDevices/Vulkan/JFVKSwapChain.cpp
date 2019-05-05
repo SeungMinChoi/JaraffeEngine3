@@ -1,6 +1,7 @@
 #include "JFVKSwapChain.h"
-#include "JFVKTools.h"
 #include "JFVKCommandBuffer.h"
+#include "JFVKMemory.h"
+#include "JFVKTools.h"
 
 JFFramework::JFVKSwapChain::JFVKSwapChain(JFVKDevice* _device, JFWindow* _window)
 	: device(_device)
@@ -293,7 +294,7 @@ void JFFramework::JFVKSwapChain::CreateDepthImageView()
 	memAlloc.memoryTypeIndex = 0;
 	memAlloc.allocationSize = memRqrmnt.size;
 	// Determine the type of memory required with the help of memory properties
-	assert(MemoryTypeFromProperties(memRqrmnt.memoryTypeBits, 0, &memAlloc.memoryTypeIndex));
+	JFVKMemory::MemoryTypeFromProperties(device, memRqrmnt.memoryTypeBits, 0, &memAlloc.memoryTypeIndex);
 
 	// Allocate the memory for image objects
 	VK_CHECK_RESULT(vkAllocateMemory(device->device, &memAlloc, NULL, &depthMemory));
@@ -346,26 +347,6 @@ void JFFramework::JFVKSwapChain::DestroyDepth()
 	vkDestroyImageView(device->device, depthImageView, NULL);
 	vkDestroyImage(device->device, depthImage, NULL);
 	vkFreeMemory(device->device, depthMemory, NULL);
-}
-
-bool JFFramework::JFVKSwapChain::MemoryTypeFromProperties(uint32_t typeBits, VkFlags requirementsMask, uint32_t * typeIndex)
-{
-	// Search memtypes to find first index with those properties
-	for (uint32_t i = 0; i < 32; i++)
-	{
-		if ((typeBits & 1) == 1)
-		{
-			// Type is available, does it match user properties?
-			if ((device->memoryProperties.memoryTypes[i].propertyFlags & requirementsMask) == requirementsMask)
-			{
-				*typeIndex = i;
-				return true;
-			}
-		}
-		typeBits >>= 1;
-	}
-	// No memory types matched, return failure
-	return false;
 }
 
 void JFFramework::JFVKSwapChain::SetImageLayout(VkImage image, VkImageAspectFlags aspectMask, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, VkAccessFlagBits srcAccessMask, const VkCommandBuffer& cmdBuf)
