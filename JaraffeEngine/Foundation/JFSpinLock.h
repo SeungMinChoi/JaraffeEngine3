@@ -10,11 +10,10 @@ namespace JFFoundation
         using Count = DWORD;
 
         JFSpinLock(Count spinCount = 1024);
-        ~JFSpinLock() noexcept;
-
         JFSpinLock(JFSpinLock&& lock) noexcept;
-        JFSpinLock& operator=(JFSpinLock&& lock) noexcept;
 
+        ~JFSpinLock() noexcept;
+        
         void Lock() const;
         bool TryLock() const;
 
@@ -22,6 +21,7 @@ namespace JFFoundation
 
     private:
         JFSpinLock(const JFSpinLock&) = delete;
+		JFSpinLock& operator=(JFSpinLock&&) = delete;
         JFSpinLock& operator=(const JFSpinLock&) = delete;
 
     private:

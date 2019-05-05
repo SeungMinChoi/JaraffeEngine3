@@ -46,6 +46,12 @@ JFFoundation::JFSpinLock::JFSpinLock(Count spinCount)
     impl = new Private::JFSpinLockImpl(spinCount);
 }
 
+JFFoundation::JFSpinLock::JFSpinLock(JFSpinLock&& lock) noexcept
+{
+	impl = lock.impl;
+	lock.impl = nullptr;
+}
+
 JFFoundation::JFSpinLock::~JFSpinLock() noexcept
 {
     if (impl)
@@ -55,30 +61,20 @@ JFFoundation::JFSpinLock::~JFSpinLock() noexcept
     }
 }
 
-JFFoundation::JFSpinLock::JFSpinLock(JFSpinLock&& lock) noexcept
-{
-    impl = lock.impl;
-    lock.impl = nullptr;
-}
-
-JFFoundation::JFSpinLock& JFFoundation::JFSpinLock::operator=(JFSpinLock&& lock) noexcept
-{
-    impl = lock.impl;
-    lock.impl = nullptr;
-    return *this;
-}
-
 bool JFFoundation::JFSpinLock::TryLock() const
 {
+	assert(impl);
     return reinterpret_cast<Private::JFSpinLockImpl*>(impl)->TryLock();
 }
 
 void JFFoundation::JFSpinLock::Lock() const
 {
+	assert(impl);
 	reinterpret_cast<Private::JFSpinLockImpl*>(impl)->Lock();
 }
 
 void JFFoundation::JFSpinLock::Unlock() const
 {
+	assert(impl);
 	reinterpret_cast<Private::JFSpinLockImpl*>(impl)->Unlock();
 }

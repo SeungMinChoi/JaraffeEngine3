@@ -61,7 +61,13 @@ JFFoundation::JFCondition::JFCondition()
 	impl = new Private::JFConditionImpl();
 }
 
-JFFoundation::JFCondition::~JFCondition()
+JFFoundation::JFCondition::JFCondition(JFCondition&& cond) noexcept
+{
+	impl = cond.impl;
+	cond.impl = nullptr;
+}
+
+JFFoundation::JFCondition::~JFCondition() noexcept
 {
 	if (impl)
 	{
@@ -70,45 +76,38 @@ JFFoundation::JFCondition::~JFCondition()
 	}
 }
 
-JFFoundation::JFCondition::JFCondition(JFCondition&& cond) noexcept
-{
-	impl = cond.impl;
-	cond.impl = nullptr;
-}
-
-JFFoundation::JFCondition& JFFoundation::JFCondition::operator=(JFCondition&& cond) noexcept
-{
-	impl = cond.impl;
-	cond.impl = nullptr;
-	return *this;
-}
-
 void JFFoundation::JFCondition::Lock()
 {
+	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Lock();
 }
 
 bool JFFoundation::JFCondition::TryLock()
 {
+	assert(impl);
 	return reinterpret_cast<Private::JFConditionImpl*>(impl)->TryLock();
 }
 
 void JFFoundation::JFCondition::Unlock()
 {
+	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Unlock();
 }
 
 void JFFoundation::JFCondition::Sleep(MilliSecond wait)
 {
+	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Sleep(wait);
 }
 
 void JFFoundation::JFCondition::Wake()
 {
+	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Wake();
 }
 
 void JFFoundation::JFCondition::WakeAll()
 {
+	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->WakeAll();
 }

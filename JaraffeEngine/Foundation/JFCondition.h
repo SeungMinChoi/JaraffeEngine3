@@ -11,10 +11,9 @@ namespace JFFoundation
 		using MilliSecond = unsigned int;
 
 		JFCondition();
-		~JFCondition();
-
 		JFCondition(JFCondition&& cond) noexcept;
-		JFCondition& operator=(JFCondition&& cond) noexcept;
+
+		~JFCondition() noexcept;
 
 		void Lock();
 		bool TryLock();
@@ -27,6 +26,7 @@ namespace JFFoundation
 
 	private:
 		JFCondition(const JFCondition&) = delete;
+		JFCondition& operator=(JFCondition&&) = delete;
 		JFCondition& operator=(const JFCondition&) = delete;
 
 	private:
