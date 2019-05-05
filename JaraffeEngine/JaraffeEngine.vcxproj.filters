@@ -74,6 +74,8 @@
     <ClInclude Include="Framework\GraphicsDevices\Interface\JFSwapChainInterface.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKImageView.h" />
     <ClInclude Include="Foundation\JFThread.h" />
+    <ClInclude Include="Foundation\JFSpinLock.h" />
+    <ClInclude Include="Foundation\JFScopeLock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
@@ -110,5 +112,6 @@
     <ClCompile Include="Framework\JFSize.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKImageView.cpp" />
     <ClCompile Include="Foundation\JFThread.cpp" />
+    <ClCompile Include="Foundation\JFSpinLock.cpp" />
   </ItemGroup>
 </Project>

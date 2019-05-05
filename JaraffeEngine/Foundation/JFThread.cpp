@@ -8,7 +8,6 @@ namespace Private
 	struct ThreadParam
 	{
 		JFThread::ThreadID id;
-		JFThread::Runable runable;
 	};
 
 	unsigned int __stdcall ThreadHandler(void* p)
@@ -20,13 +19,13 @@ namespace Private
 	}
 }
 
-JFThread::JFThread(Runable fn)
+JFThread::JFThread()
 {
 #if _WIN32
 	// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/beginthread-beginthreadex?view=vs-2019
 
 	Private::ThreadParam param;
-	param.runable = fn;
+	//param.runable = fn;
 
 	handle = (HANDLE)::_beginthreadex(nullptr, 0, &Private::ThreadHandler, &param, 0, &id);
 	if (!handle)
@@ -41,6 +40,10 @@ JFThread::JFThread(Runable fn)
 	id = param.id;
 
 #endif // _WIN32
+}
+
+JFFoundation::JFThread::~JFThread() noexcept
+{
 }
 
 JFThread::ThreadID JFFoundation::JFThread::Id()

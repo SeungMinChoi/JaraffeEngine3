@@ -181,7 +181,9 @@
     <ClInclude Include="Foundation\JFMath.h" />
     <ClInclude Include="Foundation\JFObject.h" />
     <ClInclude Include="Foundation\JFRefCounter.h" />
+    <ClInclude Include="Foundation\JFScopeLock.h" />
     <ClInclude Include="Foundation\JFSort.h" />
+    <ClInclude Include="Foundation\JFSpinLock.h" />
     <ClInclude Include="Foundation\JFString.h" />
     <ClInclude Include="Foundation\JFStringW.h" />
     <ClInclude Include="Foundation\JFThread.h" />
@@ -214,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFLog.cpp" />
+    <ClCompile Include="Foundation\JFSpinLock.cpp" />
     <ClCompile Include="Foundation\JFString.cpp" />
     <ClCompile Include="Foundation\JFStringW.cpp" />
     <ClCompile Include="Foundation\JFThread.cpp" />
