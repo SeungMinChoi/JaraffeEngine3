@@ -3,8 +3,9 @@
 namespace Private
 {
     // https://docs.microsoft.com/en-us/windows/desktop/sync/using-critical-section-objects
-    struct JFSpinLockImpl
+    class JFSpinLockImpl
     {
+	public:
         JFSpinLockImpl(JFFoundation::JFSpinLock::Count spinCount)
         {
             // Initialize the critical section one time only.
@@ -35,6 +36,7 @@ namespace Private
             LeaveCriticalSection(&criticalSection);
         }
 
+	private:
         CRITICAL_SECTION criticalSection;
     };
 }
@@ -68,18 +70,15 @@ JFFoundation::JFSpinLock& JFFoundation::JFSpinLock::operator=(JFSpinLock&& lock)
 
 bool JFFoundation::JFSpinLock::TryLock() const
 {
-    auto lock = reinterpret_cast<Private::JFSpinLockImpl*>(impl);
-    return lock->TryLock();
+    return reinterpret_cast<Private::JFSpinLockImpl*>(impl)->TryLock();
 }
 
 void JFFoundation::JFSpinLock::Lock() const
 {
-    auto lock = reinterpret_cast<Private::JFSpinLockImpl*>(impl);
-    lock->Lock();
+	reinterpret_cast<Private::JFSpinLockImpl*>(impl)->Lock();
 }
 
 void JFFoundation::JFSpinLock::Unlock() const
 {
-    auto lock = reinterpret_cast<Private::JFSpinLockImpl*>(impl);
-    lock->Unlock();
+	reinterpret_cast<Private::JFSpinLockImpl*>(impl)->Unlock();
 }

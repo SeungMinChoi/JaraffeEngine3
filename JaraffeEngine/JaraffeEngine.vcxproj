@@ -176,6 +176,7 @@
   <ItemGroup>
     <ClInclude Include="Foundation\JFArray.h" />
     <ClInclude Include="Foundation\JFAllocator.h" />
+    <ClInclude Include="Foundation\JFCondition.h" />
     <ClInclude Include="Foundation\JFIterator.h" />
     <ClInclude Include="Foundation\JFLog.h" />
     <ClInclude Include="Foundation\JFMath.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Framework\JFVector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Foundation\JFCondition.cpp" />
     <ClCompile Include="Foundation\JFLog.cpp" />
     <ClCompile Include="Foundation\JFSpinLock.cpp" />
     <ClCompile Include="Foundation\JFString.cpp" />

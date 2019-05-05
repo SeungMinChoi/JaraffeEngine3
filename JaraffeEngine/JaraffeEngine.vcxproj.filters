@@ -78,6 +78,7 @@
     <ClInclude Include="Foundation\JFScopeLock.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKResource.h" />
+    <ClInclude Include="Foundation\JFCondition.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
@@ -117,5 +118,6 @@
     <ClCompile Include="Foundation\JFSpinLock.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKResource.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.cpp" />
+    <ClCompile Include="Foundation\JFCondition.cpp" />
   </ItemGroup>
 </Project>
