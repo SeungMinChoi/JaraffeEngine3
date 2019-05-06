@@ -35,9 +35,10 @@ namespace JFFoundation
 		JFArray(const JFArray& lhs)
 			: JFArray()
 		{
-			Reserve(lhs.capacity);
-
-			memcpy_s(data, sizeof(VALUE) * capacity, lhs.data, sizeof(VALUE) * lhs.capacity);
+			Clear();
+			Reserve(lhs.count);
+			for (size_t i = 0; i < lhs.count; ++i)
+				new(std::addressof(data[count++])) VALUE(lhs.data[i]);
 			count = lhs.count;
 		}
 
@@ -171,6 +172,28 @@ namespace JFFoundation
 		VALUE& operator [](size_t index) const
 		{
 			return data[index];
+		}
+
+		JFArray& operator = (const JFArray& lhs)
+		{
+			Clear();
+			Reserve(lhs.count);
+			for (size_t i = 0; i < lhs.count; ++i)
+				new(std::addressof(data[count++])) VALUE(lhs.data[i]);
+			count = lhs.count;
+			return *this;
+		}
+
+		JFArray& operator = (JFArray&& rhs)
+		{
+			data = rhs.data;
+			count = rhs.count;
+			capacity = rhs.capacity;
+
+			rhs.data = nullptr;
+			rhs.count = 0;
+			rhs.capacity = 0;
+			return *this;
 		}
 	
 	private:

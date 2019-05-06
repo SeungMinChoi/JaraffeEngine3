@@ -3,13 +3,12 @@
 #include "../../../JFEngine.h"
 
 #include "JFVKInclude.h"
-#include "../Interface/JFGraphicsDeviceInterface.h"
 
 #include "JFVKDebug.h"
 
 namespace JFFramework
 {
-	class JFVKDevice : public JFGraphicsDeviceInterface
+	class JFVKDevice 
 	{
 	public:
 		JFVKDevice();
@@ -26,6 +25,7 @@ namespace JFFramework
 		uint32_t graphicsQueueWithPresentIndex;
 		JFArray<VkQueueFamilyProperties> queueFamilyProps;
 
+		JFArray<VkPhysicalDevice> deviceList;
 		VkPhysicalDevice* physicalDevice;
 		VkPhysicalDeviceFeatures deviceFeatures;
 		VkPhysicalDeviceProperties deviceProperties;

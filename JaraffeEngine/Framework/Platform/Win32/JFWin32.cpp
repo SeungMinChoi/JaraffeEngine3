@@ -115,11 +115,11 @@ void JFFramework::JFWindow::Create()
 	size = JFSize((float)(rc.right - rc.left), (float)(rc.bottom - rc.top));
 
 	MSG msg;
-	while (GetMessage(&msg, NULL, 0, 0))
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
+	//while (GetMessage(&msg, NULL, 0, 0))
+	//{
+	//	TranslateMessage(&msg);
+	//	DispatchMessage(&msg);
+	//}
 }
 
 void JFFramework::JFWindow::Destroy()

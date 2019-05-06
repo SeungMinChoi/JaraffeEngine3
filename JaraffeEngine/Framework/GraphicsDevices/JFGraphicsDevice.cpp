@@ -1,7 +1,5 @@
 #include "../../JFInclude.h"
 #include "JFGraphicsDevice.h"
-#include "Interface/JFSwapChainInterface.h"
-#include "Interface/JFGraphicsDeviceInterface.h"
 #include "../Platform/JFWindow.h"
 
 #ifdef JF_VULKAN
@@ -9,25 +7,27 @@
 #	include "Vulkan/JFVKSwapChain.h"
 #endif
 
-namespace DeviceHelper
+namespace Private
 {
-	static JFFramework::JFGraphicsDeviceInterface* CreateGraphicsAPI()
+	class JFGraphicsDeviceImpl
 	{
-#ifdef JF_VULKAN
-		return new JFFramework::JFVKDevice();
-#else
-		return nullptr;
-#endif
-	}
+	public:
+		JFGraphicsDeviceImpl(JFWindow* window)
+		{
+			device = new JFVKDevice();
+			swapChain = new JFVKSwapChain(device, window);
+			swapChain->Prepare();
+		}
 
-	static JFFramework::JFSwapChainInterface* CreateSwapChain(JFGraphicsDeviceInterface* device, JFWindow* window)
-	{
-#ifdef JF_VULKAN
-		return new JFFramework::JFVKSwapChain((JFVKDevice*)device, window);
-#else
-		return nullptr;
-#endif
-	}
+		void Render()
+		{
+			swapChain->Render();
+		}
+
+	private:
+		JFVKDevice* device;
+		JFVKSwapChain* swapChain;
+	};
 }
 
 JFFramework::JFGraphicsDevice::JFGraphicsDevice()
@@ -42,12 +42,16 @@ JFFramework::JFGraphicsDevice::~JFGraphicsDevice()
 
 void JFFramework::JFGraphicsDevice::Create(JFWindow* window)
 {
-	device = DeviceHelper::CreateGraphicsAPI();
-	swapChain = DeviceHelper::CreateSwapChain(device, window);
+	impl = new Private::JFGraphicsDeviceImpl(window);
 }
 
 void JFFramework::JFGraphicsDevice::Destroy()
 {
-	delete swapChain;
-	delete device;
+	delete impl;
+	impl = nullptr;
+}
+
+void JFFramework::JFGraphicsDevice::Render()
+{
+	reinterpret_cast<Private::JFGraphicsDeviceImpl*>(impl)->Render();
 }

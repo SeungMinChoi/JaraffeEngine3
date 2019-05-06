@@ -24,14 +24,17 @@ JFFramework::JFVKCommandBuffer::JFVKCommandBuffer(JFVKDevice* _device)
 
 JFFramework::JFVKCommandBuffer::~JFVKCommandBuffer()
 {
-	vkFreeCommandBuffers(device->device, commandPool, (uint32_t)buffers.Count(), buffers.Data());
-	vkDestroyCommandPool(device->device, commandPool, nullptr);
+	if(buffers.Count())
+		vkFreeCommandBuffers(device->device, commandPool, (uint32_t)buffers.Count(), buffers.Data());
+
+	if(commandPool != VK_NULL_HANDLE)
+		vkDestroyCommandPool(device->device, commandPool, nullptr);
 }
 
 JFArray<VkCommandBuffer>& JFFramework::JFVKCommandBuffer::Begin(size_t count)
 {
 	// 할당 요청한 개수를 초과해서 가지고 있다면 pool에 반환합니다.
-	for (size_t i = buffers.Count(); i < count; ++i)
+	for (size_t i = buffers.Count(); i < (count-1); ++i)
 	{
 		// VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT = 커맨드 버퍼가 보유한 메모리가 커맨드 풀로 반환된다는 뜻.
 		VK_CHECK_RESULT(vkResetCommandBuffer(buffers[i], VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT));
@@ -101,3 +104,13 @@ void JFFramework::JFVKCommandBuffer::Submit(const VkFence& fence)
 	// 완료 될때까지 기다림.
 	VK_CHECK_RESULT(vkQueueWaitIdle(device->queue));
 }
+
+//JFVKCommandBuffer& JFFramework::JFVKCommandBuffer::operator=(JFVKCommandBuffer && r)
+//{
+//	buffers = r.buffers;
+//	commandPool = r.commandPool;
+//	r.commandPool = nullptr;
+//
+//	JFArray<VkCommandBuffer> buffers;
+//	// TODO: 여기에 반환 구문을 삽입합니다.
+//}

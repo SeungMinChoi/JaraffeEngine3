@@ -123,8 +123,6 @@ VkResult JFFramework::JFVKDevice::CreateDevice()
 
 	uint32_t deviceCount;
 
-	JFArray<VkPhysicalDevice> deviceList;
-
 	VK_CHECK_RESULT(vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr));
 	assert(deviceCount > 0);
 
@@ -142,6 +140,8 @@ VkResult JFFramework::JFVKDevice::CreateDevice()
 		{
 			JFLog("Device extension validation not available!");
 		}
+
+		physicalDevice = &pd;
 
 		// device Features
 		vkGetPhysicalDeviceFeatures(pd, &deviceFeatures);
@@ -192,7 +192,7 @@ VkResult JFFramework::JFVKDevice::CreateDevice()
 		deviceInfo.ppEnabledExtensionNames = deviceExtensions.Data();
 		deviceInfo.pEnabledFeatures = NULL;
 
-		VK_CHECK_RESULT(vkCreateDevice(pd, &deviceInfo, NULL, &device));
+		VK_CHECK_RESULT(vkCreateDevice(*physicalDevice, &deviceInfo, NULL, &device));
 
 		// Queue는 vkCreateDevice로 논리적 장치 개체가 생성될 때 묵시적으로 생성됩니다.
 		vkGetDeviceQueue(device, graphicsQueueIndex, 0, &queue);

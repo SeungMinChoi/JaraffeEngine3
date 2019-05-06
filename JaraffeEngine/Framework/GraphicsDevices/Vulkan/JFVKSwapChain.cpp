@@ -10,12 +10,65 @@ JFFramework::JFVKSwapChain::JFVKSwapChain(JFVKDevice* _device, JFWindow* _window
 	CreateSurface();
 	CreateSwapChain();
 	//vkGetPhysicalDeviceSurfaceSupportKHR();
+	CreateRenderPass();
+	CreateFrameBuffer();
 }
 
-JFFramework::JFVKSwapChain::~JFVKSwapChain()
+JFFramework::JFVKSwapChain::~JFVKSwapChain() noexcept
 {
+	for (int i = 0; i < drawCommands.Count(); ++i)
+	{
+		delete drawCommands[i];
+		drawCommands[i] = nullptr;
+	}
+	drawCommands.Clear();
+
+	for (auto frameBuffer : framebuffers)
+	{
+		vkDestroyFramebuffer(device->device, frameBuffer, nullptr);
+	}
+	framebuffers.Clear();
+
+	vkDestroyRenderPass(device->device, renderPass, nullptr);
+
+	DestroyDepth();
 	DestroySwapChain();
 	DestroySurface();
+}
+
+void JFFramework::JFVKSwapChain::Prepare()
+{
+	int index = 0;
+	for (auto colorBuffer : swapChainImages)
+	{
+		drawCommands.Add(new JFVKCommandBuffer(device));
+		JFArray<VkCommandBuffer> commands = drawCommands[index]->Begin(1);
+		{
+			RecordCommandBuffer(index, &commands[0]);
+		}
+		drawCommands[index]->End();
+
+		++index;
+	}
+}
+
+void JFFramework::JFVKSwapChain::Render()
+{
+	// 사용 가능한 다음 스와프 이미지의 인덱스를 가져오기
+	vkAcquireNextImageKHR(device->device, swapChain, UINT64_MAX, VK_NULL_HANDLE, VK_NULL_HANDLE, &CurrentSwapChainImageIndex);
+
+	// 커맨드 버퍼를 실행하기 위해 큐에 제출
+	drawCommands[CurrentSwapChainImageIndex]->Submit();
+
+	// 윈도에 이미지 표시
+	VkPresentInfoKHR present = {};
+	present.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	present.swapchainCount = 1;
+	present.pSwapchains = &swapChain;
+	present.pImageIndices = &CurrentSwapChainImageIndex;
+
+	// 표시를 위해 이미지 큐에 제출
+	VK_CHECK_RESULT(vkQueuePresentKHR(device->queue, &present));
 }
 
 uint32_t JFFramework::JFVKSwapChain::PresentationSupportedQueueIndex()
@@ -98,7 +151,7 @@ void JFFramework::JFVKSwapChain::SetupSupportedFormat()
 	vkGetPhysicalDeviceSurfaceFormatsKHR(*device->physicalDevice, surface, &formatCount, nullptr);
 
 	// Formats
-	JFArray<VkSurfaceFormatKHR> formats(formatCount);
+	formats.Resize(formatCount);
 	VK_CHECK_RESULT(vkGetPhysicalDeviceSurfaceFormatsKHR(*device->physicalDevice, surface, &formatCount, formats.Data()));
 
 	// 일단 책대로.
@@ -400,4 +453,136 @@ void JFFramework::JFVKSwapChain::SetImageLayout(VkImage image, VkImageAspectFlag
 	VkPipelineStageFlags destStages = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
 
 	vkCmdPipelineBarrier(cmdBuf, srcStages, destStages, 0, 0, NULL, 0, NULL, 1, &imgMemoryBarrier);
+}
+
+void JFFramework::JFVKSwapChain::CreateRenderPass()
+{
+	// 색상버퍼, 깊이버퍼를 첨부 형식으로 랜더 패스 인스턴스에 첨부
+	VkAttachmentDescription attachments[2];
+
+	// 색상 버퍼
+	attachments[0].format = format;
+	attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+	attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	attachments[0].flags = 0;
+
+	// 깊이 버퍼
+	attachments[1].format = depthFormat;
+	attachments[1].samples = VK_SAMPLE_COUNT_1_BIT;
+	attachments[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	attachments[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	attachments[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+	attachments[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_STORE;
+	attachments[1].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	attachments[1].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	attachments[1].flags = 0;
+
+	// 색상 버퍼 첨부의 바인딩 포인트와 레이아웃 정보를 정의
+	VkAttachmentReference colorReference = {};
+	colorReference.attachment = 0;
+	colorReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+	// 깊이 버퍼 첨부의 바인딩 포인트와 레이아웃 정보를 정의
+	VkAttachmentReference depthReference = {};
+	depthReference.attachment = 1;
+	depthReference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+	// 첨부 지정 - 색상, 깊이, 리졸브, 보존 등
+	VkSubpassDescription subpass = {};
+	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	subpass.flags = 0;
+	subpass.inputAttachmentCount = 0;
+	subpass.pInputAttachments = nullptr;
+	subpass.colorAttachmentCount = 1;
+	subpass.pColorAttachments = &colorReference;
+	subpass.pResolveAttachments = nullptr;
+	subpass.pDepthStencilAttachment = &depthReference;
+	subpass.preserveAttachmentCount = 0;
+	subpass.pPreserveAttachments = nullptr;
+
+	// 랜더 패스와 연결된 첨부와 서브 패스를 지정
+	VkRenderPassCreateInfo rpInfo = {};
+	rpInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	rpInfo.pNext = nullptr;
+	rpInfo.attachmentCount = 2;
+	rpInfo.pAttachments = attachments;
+	rpInfo.subpassCount = 1;
+	rpInfo.pSubpasses = &subpass;
+	rpInfo.dependencyCount = 0;
+	rpInfo.pDependencies = nullptr;
+
+	// 랜더 패스 개체 생성
+	VK_CHECK_RESULT(vkCreateRenderPass(device->device, &rpInfo, nullptr, &renderPass));
+}
+
+void JFFramework::JFVKSwapChain::CreateFrameBuffer()
+{
+	VkImageView attachments[2];
+	attachments[1] = depthImageView;
+
+	VkFramebufferCreateInfo fbInfo = {};
+	fbInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+	fbInfo.pNext = nullptr;
+	fbInfo.renderPass = renderPass;
+	fbInfo.attachmentCount = 2;
+	fbInfo.pAttachments = attachments;
+	fbInfo.width = (uint32_t)window->size.width;
+	fbInfo.height = (uint32_t)window->size.height;
+	fbInfo.layers = 1;
+
+	uint32_t swapChainImageCount = (uint32_t)swapChainImages.Count();
+
+	framebuffers.Clear();
+	framebuffers.Resize(swapChainImageCount);
+
+	for (uint32_t i = 0; i < swapChainImageCount; ++i)
+	{
+		attachments[0] = swapChainImageViews[i];
+
+		VK_CHECK_RESULT(vkCreateFramebuffer(device->device, &fbInfo, nullptr, &framebuffers[i]));
+	}
+}
+
+void JFFramework::JFVKSwapChain::RecordCommandBuffer(int imageIndex, VkCommandBuffer* cmd)
+{
+	// 지우기 색상값 지정
+	VkClearValue clearValues[2];
+	switch (imageIndex)
+	{
+	case 0:
+		clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
+		break;
+
+	case 1:
+		clearValues[0].color = { 1.0f, 0.0f, 0.0f, 1.0f };
+		break;
+
+	default:
+		break;
+	}
+
+	// 깊이, 스탠실 지우기 값 지정
+	clearValues[1].depthStencil.depth = 1.0f;
+	clearValues[1].depthStencil.stencil = 0;
+
+	// VkRenderPassBeginInfo 제어 구조체 정의
+	VkRenderPassBeginInfo renderPassBegin = {};
+	renderPassBegin.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	renderPassBegin.renderPass = renderPass;
+	renderPassBegin.framebuffer = framebuffers[imageIndex];
+	renderPassBegin.renderArea.extent.width = (uint32_t)window->size.width;
+	renderPassBegin.renderArea.extent.height = (uint32_t)window->size.height;
+	renderPassBegin.clearValueCount = 2;
+	renderPassBegin.pClearValues = clearValues;
+
+	// 랜더 패스 인스턴스의 레코딩 시작
+	vkCmdBeginRenderPass(*cmd, &renderPassBegin, VK_SUBPASS_CONTENTS_INLINE);
+
+	// 랜더 패스 인스턴스의 레코딩 종료
+	vkCmdEndRenderPass(*cmd);
 }

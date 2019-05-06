@@ -31,9 +31,6 @@
     <ClInclude Include="Framework\GraphicsDevices\JFGraphicsDevice.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\GraphicsDevices\Interface\JFGraphicsDeviceInterface.h">
-      <Filter>Framework\GraphicsDevice</Filter>
-    </ClInclude>
     <ClInclude Include="Foundation\JFMath.h" />
     <ClInclude Include="Foundation\JFLog.h" />
     <ClInclude Include="Framework\Platform\JFWindow.h" />
@@ -71,14 +68,12 @@
       <Filter>Framework\GraphicsDevice\Vulkan</Filter>
     </ClInclude>
     <ClInclude Include="Framework\JFSize.h" />
-    <ClInclude Include="Framework\GraphicsDevices\Interface\JFSwapChainInterface.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKImageView.h" />
     <ClInclude Include="Foundation\JFThread.h" />
     <ClInclude Include="Foundation\JFSpinLock.h" />
     <ClInclude Include="Foundation\JFScopeLock.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKResource.h" />
-    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKRenderPass.h" />
     <ClInclude Include="Foundation\JFCondition.h" />
   </ItemGroup>
   <ItemGroup>
@@ -119,7 +114,6 @@
     <ClCompile Include="Foundation\JFSpinLock.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKResource.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.cpp" />
-    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKRenderPass.cpp" />
     <ClCompile Include="Foundation\JFCondition.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKMemory.cpp" />
   </ItemGroup>

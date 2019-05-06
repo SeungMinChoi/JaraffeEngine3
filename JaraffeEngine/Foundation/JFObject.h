@@ -13,7 +13,9 @@ namespace JFFoundation
 		JFObject(T* p = nullptr)
 			: target(p)
 			, refCounter(nullptr)
-		{}
+		{
+			AddRef();
+		}
 		JFObject(const JFObject& obj)
 			: target(obj.target)
 			, refCounter(obj.refCounter)

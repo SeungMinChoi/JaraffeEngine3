@@ -3,8 +3,6 @@
 namespace JFFramework
 {
 	class JFWindow;
-	class JFSwapChainInterface;
-	class JFGraphicsDeviceInterface;
 	class JFGraphicsDevice
 	{
 	public:
@@ -14,8 +12,9 @@ namespace JFFramework
 		void Create(JFWindow* window);
 		void Destroy();
 
+		void Render();
+
 	private:
-		JFSwapChainInterface* swapChain;
-		JFGraphicsDeviceInterface* device;
+		void* impl;
 	};
 }

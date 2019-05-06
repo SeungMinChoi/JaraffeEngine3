@@ -27,6 +27,9 @@ namespace JFFramework
 		void SetupConsole();
 		void DestroyConsole();
 
+	private:
+		bool isExit = false;
+
 		JFObject<JFWindow> window;
 		JFObject<JFGraphicsDevice> graphicsDevice;
 	};

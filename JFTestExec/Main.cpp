@@ -11,6 +11,7 @@ int main()
     JFScopeLock<JFSpinLock> sl(s);
 
 	JFApplication app;
+	app.Run();
 
 	JFVector2 v = JFVector2::Zero;
 	v.Dot(JFVector2(1));

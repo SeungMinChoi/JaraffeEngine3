@@ -19,6 +19,8 @@ JFFramework::JFApplication::~JFApplication()
 
 void JFFramework::JFApplication::Run()
 {
+	while(isExit == false)
+		Render();
 }
 
 void JFFramework::JFApplication::PreUpdate()
@@ -35,6 +37,7 @@ void JFFramework::JFApplication::PostUpdate()
 
 void JFFramework::JFApplication::Render()
 {
+	graphicsDevice->Render();
 }
 
 

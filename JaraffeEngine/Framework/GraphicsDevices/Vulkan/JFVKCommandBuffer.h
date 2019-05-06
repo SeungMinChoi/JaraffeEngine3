@@ -24,6 +24,8 @@ namespace JFFramework
 	// 제출 방식
 	// - 단일 큐 : 여러 개의 커맨드 버퍼는 실행되거나 중첩가능. 각명령의 순서와 표준에서 정의된 API실행 순서에 따라 수행돼야 한다.
 	// - 복수 큐 : 특별한 순서 없이 실행된다. 순서 지정은 세마포어 나 펜스를 통한 동기화를 통해서만 가능하다.
+
+	// TODO : 이놈 바꿀방법 생각중
 	class JFVKCommandBuffer
 	{
 	public:
@@ -34,6 +36,8 @@ namespace JFFramework
 		JFArray<VkCommandBuffer>& Begin(size_t count);
 		void End();
 		void Submit(const VkFence& fence = VK_NULL_HANDLE);
+
+		//JFVKCommandBuffer& operator = (JFVKCommandBuffer&& r);
 
 	private:
 		JFObject<JFVKDevice> device;

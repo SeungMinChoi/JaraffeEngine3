@@ -1,29 +1,33 @@
 #pragma once
 
-#include "../Interface/JFSwapChainInterface.h"
-
 #include "JFVKInclude.h"
 #include "../../../JFFoundation.h"
 #include "../../Platform/JFWindow.h"
 
 #include "JFVKDevice.h"
 #include "JFVKImage.h"
+#include "JFVKCommandBuffer.h"
 
 using namespace JFFoundation;
 
 namespace JFFramework
 {
-	class JFVKSwapChain : public JFSwapChainInterface
+	class JFVKSwapChain
 	{
 	public:
 		JFVKSwapChain(JFVKDevice* device, JFWindow* window);
-		~JFVKSwapChain();
+		~JFVKSwapChain() noexcept;
+
+		void Prepare();
+		void Render();
 
     public:
         VkSurfaceKHR surface = VK_NULL_HANDLE;
 
         VkExtent2D extent;
         VkSwapchainKHR swapChain = VK_NULL_HANDLE;
+
+		uint32_t CurrentSwapChainImageIndex = 0;
         JFArray<VkImage> swapChainImages;
         JFArray<VkImageView> swapChainImageViews;
 
@@ -32,6 +36,7 @@ namespace JFFramework
         VkImageView depthImageView;
         VkDeviceMemory depthMemory;
 
+		JFArray<VkSurfaceFormatKHR> formats;
         VkFormat format;
         VkPresentModeKHR presentMode;
         JFArray<VkPresentModeKHR> supportedPresendModes;
@@ -40,6 +45,10 @@ namespace JFFramework
 
         uint32_t desiredNumberOfSwapChainImages;
         VkSurfaceTransformFlagBitsKHR preTransform;
+
+		VkRenderPass renderPass;
+		JFArray<VkFramebuffer> framebuffers;
+		JFArray<JFVKCommandBuffer*> drawCommands;
 
 	private:
 		void CreateSurface();
@@ -60,6 +69,11 @@ namespace JFFramework
 		void DestroyDepth();
 
 		void SetImageLayout(VkImage image, VkImageAspectFlags aspectMask, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, VkAccessFlagBits srcAccessMask, const VkCommandBuffer& cmdBuf);
+
+		void CreateRenderPass();
+		void CreateFrameBuffer();
+
+		void RecordCommandBuffer(int imageIndex, VkCommandBuffer* cmd);
 
 		uint32_t PresentationSupportedQueueIndex();
 
