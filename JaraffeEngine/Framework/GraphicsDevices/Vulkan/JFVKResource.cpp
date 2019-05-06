@@ -1,5 +1,6 @@
 #include "JFVKResource.h"
 #include "JFVKTools.h"
+#include "JFVKRenderPass.h"
 
 JFFramework::JFVKResource::JFVKResource(JFVKDevice* _device, 
                                         VkBufferUsageFlagBits usage, 

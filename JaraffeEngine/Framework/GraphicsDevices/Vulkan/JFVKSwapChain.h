@@ -19,6 +19,28 @@ namespace JFFramework
 		JFVKSwapChain(JFVKDevice* device, JFWindow* window);
 		~JFVKSwapChain();
 
+    public:
+        VkSurfaceKHR surface = VK_NULL_HANDLE;
+
+        VkExtent2D extent;
+        VkSwapchainKHR swapChain = VK_NULL_HANDLE;
+        JFArray<VkImage> swapChainImages;
+        JFArray<VkImageView> swapChainImageViews;
+
+        VkFormat depthFormat = VK_FORMAT_UNDEFINED;
+        VkImage depthImage;
+        VkImageView depthImageView;
+        VkDeviceMemory depthMemory;
+
+        VkFormat format;
+        VkPresentModeKHR presentMode;
+        JFArray<VkPresentModeKHR> supportedPresendModes;
+
+        VkSurfaceCapabilitiesKHR capabilities;
+
+        uint32_t desiredNumberOfSwapChainImages;
+        VkSurfaceTransformFlagBitsKHR preTransform;
+
 	private:
 		void CreateSurface();
 		void DestroySurface();
@@ -42,28 +64,7 @@ namespace JFFramework
 
 		uint32_t PresentationSupportedQueueIndex();
 
-	private:
-		VkSurfaceKHR surface = VK_NULL_HANDLE;
-
-		VkExtent2D extent;
-		VkSwapchainKHR swapChain = VK_NULL_HANDLE;
-		JFArray<VkImage> swapChainImages;
-		JFArray<VkImageView> swapChainImageViews;
-
-		VkFormat depthFormat = VK_FORMAT_UNDEFINED;
-		VkImage depthImage;
-		VkImageView depthImageView;
-		VkDeviceMemory depthMemory;
-
-		VkFormat format;
-		VkPresentModeKHR presentMode;
-		JFArray<VkPresentModeKHR> supportedPresendModes;
-
-		VkSurfaceCapabilitiesKHR capabilities;
-
-		uint32_t desiredNumberOfSwapChainImages;
-		VkSurfaceTransformFlagBitsKHR preTransform;
-
+    private:
 		JFObject<JFWindow> window;
 		JFObject<JFVKDevice> device;
 	};

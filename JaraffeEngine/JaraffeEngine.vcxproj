@@ -188,6 +188,7 @@
     <ClInclude Include="Foundation\JFStringW.h" />
     <ClInclude Include="Foundation\JFThread.h" />
     <ClInclude Include="Framework\GraphicsDevices\Interface\JFSwapChainInterface.h" />
+    <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKRenderPass.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKResource.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKCommandBuffer.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKDebug.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKImage.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKImageView.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKLayerChecker.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKRenderPass.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKResource.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKSwapChain.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.cpp" />
