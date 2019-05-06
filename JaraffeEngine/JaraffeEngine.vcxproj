@@ -176,6 +176,7 @@
   <ItemGroup>
     <ClInclude Include="Foundation\JFArray.h" />
     <ClInclude Include="Foundation\JFAllocator.h" />
+    <ClInclude Include="Foundation\JFCondition.h" />
     <ClInclude Include="Foundation\JFIterator.h" />
     <ClInclude Include="Foundation\JFLog.h" />
     <ClInclude Include="Foundation\JFMath.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Framework\JFVector4.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Foundation\JFCondition.cpp" />
     <ClCompile Include="Foundation\JFLog.cpp" />
     <ClCompile Include="Foundation\JFSpinLock.cpp" />
     <ClCompile Include="Foundation\JFString.cpp" />
@@ -234,6 +236,7 @@
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKResource.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKSwapChain.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKMemory.cpp" />
     <ClCompile Include="Framework\JFApplication.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\JFGraphicsDevice.cpp" />
     <ClCompile Include="Framework\JFMatrix2.cpp" />

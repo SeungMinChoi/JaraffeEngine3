@@ -1,5 +1,7 @@
 #pragma once
 
+#include "JFVKInclude.h"
+
 namespace JFFramework
 {
 	// Vulkan은 메모리를 크게 2가지로 구분
@@ -20,4 +22,10 @@ namespace JFFramework
 	// vkGetPhysicalDeviceMemoryProperties()는 물리적 장치에서 사용가능한 메모리 힙과 메모리 속성을 쿼리.
 	// vkAllocateMemory 를 통해 장치메모리 할당 가능.
 	// 당연히 해제는 vkFreeMemory()
+
+	class JFVKDevice;
+	namespace JFVKMemory
+	{
+		bool MemoryTypeFromProperties(JFVKDevice* device, uint32_t typeBits, VkFlags requirementsMask, uint32_t* typeIndex);
+	}
 }

@@ -3,8 +3,9 @@
 namespace Private
 {
     // https://docs.microsoft.com/en-us/windows/desktop/sync/using-critical-section-objects
-    struct JFSpinLockImpl
+    class JFSpinLockImpl
     {
+	public:
         JFSpinLockImpl(JFFoundation::JFSpinLock::Count spinCount)
         {
             // Initialize the critical section one time only.
@@ -35,6 +36,7 @@ namespace Private
             LeaveCriticalSection(&criticalSection);
         }
 
+	private:
         CRITICAL_SECTION criticalSection;
     };
 }
@@ -42,6 +44,12 @@ namespace Private
 JFFoundation::JFSpinLock::JFSpinLock(Count spinCount)
 {
     impl = new Private::JFSpinLockImpl(spinCount);
+}
+
+JFFoundation::JFSpinLock::JFSpinLock(JFSpinLock&& lock) noexcept
+{
+	impl = lock.impl;
+	lock.impl = nullptr;
 }
 
 JFFoundation::JFSpinLock::~JFSpinLock() noexcept
@@ -53,33 +61,20 @@ JFFoundation::JFSpinLock::~JFSpinLock() noexcept
     }
 }
 
-JFFoundation::JFSpinLock::JFSpinLock(JFSpinLock&& lock) noexcept
-{
-    impl = lock.impl;
-    lock.impl = nullptr;
-}
-
-JFFoundation::JFSpinLock& JFFoundation::JFSpinLock::operator=(JFSpinLock&& lock) noexcept
-{
-    impl = lock.impl;
-    lock.impl = nullptr;
-    return *this;
-}
-
 bool JFFoundation::JFSpinLock::TryLock() const
 {
-    auto lock = reinterpret_cast<Private::JFSpinLockImpl*>(impl);
-    return lock->TryLock();
+	assert(impl);
+    return reinterpret_cast<Private::JFSpinLockImpl*>(impl)->TryLock();
 }
 
 void JFFoundation::JFSpinLock::Lock() const
 {
-    auto lock = reinterpret_cast<Private::JFSpinLockImpl*>(impl);
-    lock->Lock();
+	assert(impl);
+	reinterpret_cast<Private::JFSpinLockImpl*>(impl)->Lock();
 }
 
 void JFFoundation::JFSpinLock::Unlock() const
 {
-    auto lock = reinterpret_cast<Private::JFSpinLockImpl*>(impl);
-    lock->Unlock();
+	assert(impl);
+	reinterpret_cast<Private::JFSpinLockImpl*>(impl)->Unlock();
 }

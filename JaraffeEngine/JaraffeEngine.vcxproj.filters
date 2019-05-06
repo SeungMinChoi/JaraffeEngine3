@@ -79,6 +79,7 @@
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKResource.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKRenderPass.h" />
+    <ClInclude Include="Foundation\JFCondition.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
@@ -119,5 +120,7 @@
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKResource.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.cpp" />
     <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKRenderPass.cpp" />
+    <ClCompile Include="Foundation\JFCondition.cpp" />
+    <ClCompile Include="Framework\GraphicsDevices\Vulkan\JFVKMemory.cpp" />
   </ItemGroup>
 </Project>

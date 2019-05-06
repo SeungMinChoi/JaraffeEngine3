@@ -59,7 +59,6 @@ namespace JFFramework
 		void CreateDepthImageView();
 		void DestroyDepth();
 
-		bool MemoryTypeFromProperties(uint32_t typeBits, VkFlags requirementsMask, uint32_t* typeIndex);
 		void SetImageLayout(VkImage image, VkImageAspectFlags aspectMask, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, VkAccessFlagBits srcAccessMask, const VkCommandBuffer& cmdBuf);
 
 		uint32_t PresentationSupportedQueueIndex();

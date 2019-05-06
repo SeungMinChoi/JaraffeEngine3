@@ -61,7 +61,7 @@ namespace JFFoundation
 		}
 
 		// JFObject Type인대 target만 넘긴다면 문제됨.
-		JFObject& operator = (const T* obj)
+		JFObject& operator = (T* obj)
 		{
 			if (target != obj)
 			{
