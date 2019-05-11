@@ -75,6 +75,8 @@
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKVertexBufer.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKResource.h" />
     <ClInclude Include="Foundation\JFCondition.h" />
+    <ClInclude Include="Foundation\JFTuple.h" />
+    <ClInclude Include="Foundation\JFTypeTraits.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">

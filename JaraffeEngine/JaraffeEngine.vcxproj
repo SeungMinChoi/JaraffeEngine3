@@ -188,6 +188,8 @@
     <ClInclude Include="Foundation\JFString.h" />
     <ClInclude Include="Foundation\JFStringW.h" />
     <ClInclude Include="Foundation\JFThread.h" />
+    <ClInclude Include="Foundation\JFTuple.h" />
+    <ClInclude Include="Foundation\JFTypeTraits.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKResource.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKCommandBuffer.h" />
     <ClInclude Include="Framework\GraphicsDevices\Vulkan\JFVKDebug.h" />
