@@ -5,71 +5,40 @@
 
 namespace JFFoundation
 {
-	//template <class Return, class... Params>
-	//struct JFFunctionInfo;
-	//
-	//template <class Return, class... Params>
-	//struct JFFunctionInfo<Return(*)(Params...)>
-	//{
-	//	using ReturnType = Return;
-	//	using Parameters = JFTuple<Params...>;
-	//	using FunctionType = Return(*)(Params...);
-	//};
-	//
-	//template <class Func, class Return, class... Params>
-	//class JFFunctionInvoker
-	//{
-	//public:
-	//	JFFunctionInvoker(Func&& fn)
-	//		: func(fn)
-	//	{}
-	//
-	//	Return operator () (Params... args)
-	//	{
-	//		return func(args...);
-	//	}
-	//
-	//private:
-	//	Func func;
-	//};
-	//
-	//template <class Function>
-	//class JFFunction
-	//{
-	//public:
-	//	JFFunction(Function&& fn)
-	//		: function(fn)
-	//	{}
-	//
-	//	//typename JFFunctionInfo<Func>::ReturnType operator () const
-	//	//{
-	//	//}
-	//
-	//private:
-	//	Function function;
-	//	typename JFFunction<Function> func;
-	//};
-
-	template <class Function>
-	class JFFunction
+	template <class Function, class ReturnType, class... Params>
+	class JFFunctionInvoker
 	{
 	public:
-		JFFunction(Function&& fn)
-			: function(std::forward<Function>(fn))
-		{}
-		
-		////typename FunctionTraits<Function>::ReturnType operator () (Params... args) const
-		////{
-		////	return function(args...);
-		////}
-		//
-		Function operator * ()
+		JFFunctionInvoker(Function&& fn) : function(fn) {}
+	
+		ReturnType Invoke(Params... params)
 		{
-			return function;
+			function(params...);
 		}
-
+	
 	private:
 		Function function;
 	};
-
+	
+	template <class Function>
+	class JFFunction
+	{
+		using Traits = FunctionTraits<decltype(&Function::operator())>; // 타입에따라 다르게 해야함..
+		using ReturnType = typename Traits::ReturnType;
+		using ParamTypeList = typename Traits::ParamTypeList;
+		
+		template<class... Params> using InvokerType = JFFunctionInvoker<Function, ReturnType, Params...>;
+		using Invoker = typename ParamTypeList::template InputTypes<InvokerType>;
+	
+	public:
+		JFFunction(Function&& fn) : invoker(fn) {}
+	
+		//ReturnType Invoke()
+		//{
+		//	invoker.Invoke();
+		//}
+	
+	private:
+		Invoker invoker;
+	};
 }
