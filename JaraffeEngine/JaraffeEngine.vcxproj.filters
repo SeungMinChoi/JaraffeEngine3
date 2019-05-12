@@ -77,6 +77,7 @@
     <ClInclude Include="Foundation\JFCondition.h" />
     <ClInclude Include="Foundation\JFTuple.h" />
     <ClInclude Include="Foundation\JFTypeTraits.h" />
+    <ClInclude Include="Foundation\JFFunction.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">

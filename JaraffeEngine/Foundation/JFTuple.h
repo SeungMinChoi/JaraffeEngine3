@@ -1,7 +1,5 @@
 #pragma once
 
-#include <type_traits>
-
 namespace JFFoundation
 {
 	template <class... Types>
@@ -28,7 +26,7 @@ namespace JFFoundation
 	struct SequenceTupleElement<0, T, Types...>
 	{
 		using Type = T;
-		using ClassType = typename JFTupleElement<T, Types...>::ClassType;
+		using ClassType = typename JFTupleElement<T, Types...>;
 	};
 
 	template <size_t Index, class T, class... Types>
@@ -54,12 +52,4 @@ namespace JFFoundation
 	private:
 		JFTupleElement<Types...> elements;
 	};
-	
-
-	//template<size_t N, typename... Types>
-	//inline typename JFTupleElement<N, JFTuple<Types...>>::Type& Get(JFTuple<Types...>& t)
-	//{
-	//	using TupleType = typename JFTupleElement<N, JFTuple<Types...>>::TupleType;
-	//	return ((TupleType&)t).first;
-	//}
 }

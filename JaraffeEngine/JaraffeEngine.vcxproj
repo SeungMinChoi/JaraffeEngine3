@@ -177,6 +177,7 @@
     <ClInclude Include="Foundation\JFArray.h" />
     <ClInclude Include="Foundation\JFAllocator.h" />
     <ClInclude Include="Foundation\JFCondition.h" />
+    <ClInclude Include="Foundation\JFFunction.h" />
     <ClInclude Include="Foundation\JFIterator.h" />
     <ClInclude Include="Foundation\JFLog.h" />
     <ClInclude Include="Foundation\JFMath.h" />

@@ -6,6 +6,14 @@
 #include <string>
 
 #include "Foundation/JFTuple.h"
+#include "Foundation/JFFunction.h"
+
+#include <functional>
+
+void TestFunc(int a, int b)
+{
+	
+}
 
 int main()
 {
@@ -13,8 +21,26 @@ int main()
 	auto testValue0 = a.Item<0>();
 	auto testValue1 = a.Item<1>();
 	auto testValue2 = a.Item<2>();
-	
+	//std::index_sequence
 	//auto asd = Get<0>(a);
+
+	auto sasas =[](int a, int b)
+	{};
+
+	//FunctionTraits<decltype(sasas)> xzc;
+
+	JFFunction testFunc = [](int a, int b)
+	{};
+
+	(*testFunc)(1, 2);
+//	//(*testFunc)(1, 2);
+//	//testFunc(1, 2);
+//	//JFFunction<void(int, int)> testFunc2 = [](int a, int b)
+	//{
+	//
+	//};
+
+	
 
     JFSpinLock s;
     JFScopeLock<JFSpinLock> sl(s);
