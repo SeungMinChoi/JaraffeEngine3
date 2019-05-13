@@ -12,7 +12,7 @@
 
 void TestFunc(int a, int b)
 {
-	
+    printf("hi");
 }
 
 int main()
@@ -21,10 +21,14 @@ int main()
 	auto testValue0 = a.Item<0>();
 	auto testValue1 = a.Item<1>();
 	auto testValue2 = a.Item<2>();
-	//std::index_sequence<1>::value_type;
+	//td::index_sequence<1>::value_type;
 	//auto asd = Get<0>(a);
 
-	std::function funcTest = [](int a, int b){};
+    std::_Test_callable(TestFunc);
+
+    std::index_sequence<1>::value_type;
+
+	std::function funcTest = [a](int a, int b){};
 
 	//auto sasas =[](int a, int b)
 	//{};
@@ -35,7 +39,11 @@ int main()
 	//
 	//(*testFunc)(1, 2);
 	//
-	JFFunction testFunc2 = TestFunc;
+
+    JFFunction testFunc2{ TestFunc };
+    testFunc2.Invoke(1, 2);
+
+    //testFunc2.Invoke();
 	//
 	//(*testFunc2)(1, 2);
 
@@ -56,6 +64,8 @@ int main()
 
 	JFVector2 v = JFVector2::Zero;
 	v.Dot(JFVector2(1));
+
+    system("pause");
     
 	return 0;
 }

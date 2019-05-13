@@ -2,6 +2,7 @@
 
 #include "JFTuple.h"
 #include "JFTypeTraits.h"
+#include <memory>
 
 namespace JFFoundation
 {
@@ -17,28 +18,50 @@ namespace JFFoundation
 		}
 	
 	private:
-		Function function;
+		Function* function;
 	};
-	
-	template <class Function>
-	class JFFunction
-	{
-		using Traits = FunctionTraits<decltype(&Function::operator())>; // 타입에따라 다르게 해야함..
-		using ReturnType = typename Traits::ReturnType;
-		using ParamTypeList = typename Traits::ParamTypeList;
-		
-		template<class... Params> using InvokerType = JFFunctionInvoker<Function, ReturnType, Params...>;
-		using Invoker = typename ParamTypeList::template InputTypes<InvokerType>;
-	
-	public:
-		JFFunction(Function&& fn) : invoker(fn) {}
-	
-		//ReturnType Invoke()
-		//{
-		//	invoker.Invoke();
-		//}
-	
-	private:
-		Invoker invoker;
-	};
+
+    // User-defined deduction guides
+    template <class Function>
+    class JFFunction
+    {
+    public:
+        JFFunction(Function*);
+    };
+
+	template <class ReturnType, class... Params>
+    class JFFunction<ReturnType(Params...)>
+    { 
+        using FunctionType = ReturnType(*)(Params...);
+
+    public:
+        JFFunction(FunctionType fn)
+            : function(fn)
+        {}
+
+        void Invoke(Params... params)
+        {
+            function(params...);
+        }
+
+    private:
+        FunctionType function;
+    };
+
+    //template <>
+    //class JFFunction<ReturnType(*)(Params...)>
+    //{
+    //    //using FunctionType = ReturnType(*)(Params...);
+    //
+    //public:
+    //    //JFFunction(FunctionType&& fn) : invoker(fn) {}
+    //
+    //    //ReturnType Invoke(Params... params)
+    //    //{
+    //    //    invoker(params...);
+    //    //}
+    //
+    //private:
+    //    //FunctionType invoker;
+    //};
 }
