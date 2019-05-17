@@ -1,6 +1,6 @@
 #pragma once
 
-#include "JFTypeListh.h"
+#include "JFTypeTuple.h"
 
 namespace JFFoundation
 {
@@ -31,7 +31,7 @@ namespace JFFoundation
 	struct FunctionTraits<Return(*)(Params...)>
 	{
 		using ReturnType = Return;
-		using ParamTypeList = JFTypeList<Params...>;
+		using ParamTypeList = JFTypeTuple<Params...>;
 
 		using FunctionType = Return(*)(Params...);
 	};
@@ -41,7 +41,7 @@ namespace JFFoundation
 	struct FunctionTraits<Return(Class::*)(Params...)>
 	{
 		using ReturnType = Return;
-		using ParamTypeList = JFTypeList<Params...>;
+		using ParamTypeList = JFTypeTuple<Params...>;
 
 		using FunctionType = Return(Class::*)(Params...);
 	};
@@ -49,7 +49,7 @@ namespace JFFoundation
 	struct FunctionTraits<Return(Class::*)(Params...) const>
 	{
 		using ReturnType = Return;
-		using ParamTypeList = JFTypeList<Params...>;
+		using ParamTypeList = JFTypeTuple<Params...>;
 
 		using FunctionType = Return(Class::*)(Params...) const;
 	};

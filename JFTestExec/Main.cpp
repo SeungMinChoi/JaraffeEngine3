@@ -26,7 +26,9 @@ int main()
 
     std::_Test_callable(TestFunc);
 
-    std::index_sequence<1>::value_type;
+    //std::index_sequence<1>::value_type;
+
+    std::conditional<1, 2, 3>;
 
 	std::function funcTest = [a](int a, int b){};
 

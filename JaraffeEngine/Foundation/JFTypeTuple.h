@@ -3,7 +3,7 @@
 namespace JFFoundation
 {
 	template<class... Types>
-	class JFTypeList
+	class JFTypeTuple
 	{
 	public:
 		// variadic template으로 받는 형태인경우 TypeList를 넣어줍니다.

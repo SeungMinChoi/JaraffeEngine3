@@ -78,8 +78,8 @@
     <ClInclude Include="Foundation\JFTuple.h" />
     <ClInclude Include="Foundation\JFTypeTraits.h" />
     <ClInclude Include="Foundation\JFFunction.h" />
-    <ClInclude Include="Foundation\JFTypeListh.h" />
     <ClInclude Include="Foundation\JFTypes.h" />
+    <ClInclude Include="Foundation\JFTypeTuple.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Foundation\JFAllocator.cpp">
