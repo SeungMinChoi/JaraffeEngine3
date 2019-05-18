@@ -2,7 +2,15 @@
 
 namespace JFFoundation
 {
-#pragma region Number
+#pragma region Template Basic Type
+	template<bool B>
+	struct JFBool
+	{
+		enum { Value = B };
+	};
+	using JFTrue = JFBool<true>;
+	using JFFalse = JFBool<false>;
+
     template<int Num>
     struct JFNumber
     {
@@ -10,19 +18,20 @@ namespace JFFoundation
     };
 #pragma endregion
 
+
 #pragma region Conditional
     template<bool B, class T, class F>
     struct JFConditional;
 
-    template<class T, class F>
+	template<class T, class F>
     struct JFConditional<1, T, F>
     {
-        enum { Type = T };
+		using Type = T;
     };
     template<class T, class F>
     struct JFConditional<0, T, F>
     {
-        enum { Type = F };
+		using Type = F;
     };
 #pragma endregion
 }

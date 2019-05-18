@@ -7,13 +7,39 @@
 
 #include "Foundation/JFTuple.h"
 #include "Foundation/JFFunction.h"
+#include "Foundation/JFTypeTraits.h"
 
 #include <functional>
+
+#include <type_traits>
 
 void TestFunc(int a, int b)
 {
     printf("hi");
 }
+
+class T
+{
+public:
+	void operator () ()
+	{
+
+	}
+};
+
+class T1
+{
+public:
+
+};
+
+class T2 final
+{
+	void operator () ()
+	{
+
+	}
+};
 
 int main()
 {
@@ -24,14 +50,9 @@ int main()
 	//td::index_sequence<1>::value_type;
 	//auto asd = Get<0>(a);
 
-    std::_Test_callable(TestFunc);
-
     //std::index_sequence<1>::value_type;
 
-    std::conditional<1, 2, 3>;
-
 	std::function funcTest = [a](int a, int b){};
-
 	//auto sasas =[](int a, int b)
 	//{};
 
@@ -42,10 +63,25 @@ int main()
 	//(*testFunc)(1, 2);
 	//
 
+	auto zxcz = [](int a, int b){};
+	bool sadasd = IsCallable<decltype(zxcz)>::Value;
+
     JFFunction testFunc2{ TestFunc };
+	//bool sadasd1 = testFunc2.Test();
+	//bool zxczxcasd = testFunc2.t();
     testFunc2.Invoke(1, 2);
 
-    //testFunc2.Invoke();
+	auto labda = [a](int a, int b){  printf("hi"); };
+	auto globalLabda = [](int a, int b){  printf("hi"); };
+	JFFunction testFunc3 = std::move(labda);
+	JFFunction testFunc4 = std::move(globalLabda);
+	testFunc3.Invoke(1, 2);
+	//bool sadasd2 = testFunc3.Test();
+	//bool zxczxc = testFunc3.t();
+
+	//testFunc3.Invoke(1, 2);
+    
+	//testFunc2.Invoke();
 	//
 	//(*testFunc2)(1, 2);
 

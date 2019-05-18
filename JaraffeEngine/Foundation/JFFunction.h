@@ -6,62 +6,62 @@
 
 namespace JFFoundation
 {
-	template <class Function, class ReturnType, class... Params>
-	class JFFunctionInvoker
+   //template <class Function>
+   //class JFFunction
+   //{
+   //public:
+	//	// User-defined deduction guides
+   //    JFFunction(Function*);
+   //};
+
+	template<bool B, class Function>
+	struct CastOperatorType;
+
+	template<class Function>
+	struct CastOperatorType<true, Function>
 	{
-	public:
-		JFFunctionInvoker(Function&& fn) : function(fn) {}
+		using Type = decltype(&Function::operator());
+	};
+
+	template<class Function>
+	struct CastOperatorType<false, Function>
+	{
+		using Type = Function*;
+	};
+
+	template <class Function>
+	class JFFunction
+	{
+		enum { IsCallable = IsCallable<Function>::Value };
+
+		// Callable이 아니라면 GlobalFunction이므로 PointerType으로 받습니다.
+		using FunctionRefType = typename JFConditional<IsCallable, Function, Function*>::Type;
+		using FunctionRefType1 = typename JFConditional<IsCallable, CastOperatorType<true, Function>, CastOperatorType<false, Function>>::Type;
+
+		//using FunctionInfo = 
+		//	typename JFConditional<
+		//		IsCallable<Function>::Value, 
+		//		FunctionTraits<decltype(&Function::operator())>, 
+		//		FunctionTraits<Function*>>::Type; //;
+		//
+		using FunctionType = FunctionTraits<typename FunctionRefType1::Type>;
+
+		using RetrunType = typename FunctionType::ReturnType;
+		using ParamTypeTuple = typename FunctionType::ParamTypeTuple;
 	
-		ReturnType Invoke(Params... params)
+	public:
+		JFFunction(Function&& f)
+			: func(f)
+		{ }
+
+		template<class... Params>
+		RetrunType Invoke(Params... params)
 		{
-			function(params...);
+			return func(params...);
 		}
 	
 	private:
-		Function* function;
+		FunctionRefType func;
 	};
 
-    // User-defined deduction guides
-    template <class Function>
-    class JFFunction
-    {
-    public:
-        JFFunction(Function*);
-    };
-
-	template <class ReturnType, class... Params>
-    class JFFunction<ReturnType(Params...)>
-    { 
-        using FunctionType = ReturnType(*)(Params...);
-
-    public:
-        JFFunction(FunctionType fn)
-            : function(fn)
-        {}
-
-        void Invoke(Params... params)
-        {
-            function(params...);
-        }
-
-    private:
-        FunctionType function;
-    };
-
-    //template <>
-    //class JFFunction<ReturnType(*)(Params...)>
-    //{
-    //    //using FunctionType = ReturnType(*)(Params...);
-    //
-    //public:
-    //    //JFFunction(FunctionType&& fn) : invoker(fn) {}
-    //
-    //    //ReturnType Invoke(Params... params)
-    //    //{
-    //    //    invoker(params...);
-    //    //}
-    //
-    //private:
-    //    //FunctionType invoker;
-    //};
 }
