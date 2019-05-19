@@ -3,6 +3,14 @@
 
 namespace JFFoundation {}
 
+#include "Foundation/JFTypes.h"
+#include "Foundation/JFTypeTraits.h"
+
+#include "Foundation/JFTuple.h"
+#include "Foundation/JFTypeTuple.h"
+
+#include "Foundation/JFFunction.h"
+
 #include "Foundation/JFMath.h"
 #include "Foundation/JFSort.h"
 

@@ -2,7 +2,6 @@
 
 #include "JFTuple.h"
 #include "JFTypeTraits.h"
-#include <memory>
 
 namespace JFFoundation
 {
