@@ -19,7 +19,8 @@ namespace Private
 	}
 }
 
-JFThread::JFThread()
+JFFoundation::JFThread::JFThread(Runable _runable)
+	: runable(_runable)
 {
 #if _WIN32
 	// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/beginthread-beginthreadex?view=vs-2019
@@ -34,7 +35,7 @@ JFThread::JFThread()
 		//throw std::runtime_error("Error 0x%X while trying to create thread", error);
 	}
 
-	
+
 	//::WaitForSingleObject(handle, INFINITE);
 
 	id = param.id;

@@ -33,7 +33,7 @@ namespace JFFoundation
 
 	// for GlobalFunction
 	template <class Function>
-	class JFFunction
+	class JF_API JFFunction
 	{
 		enum { IsCallable = IsCallable<Function>::Value };
 
@@ -72,7 +72,7 @@ namespace JFFoundation
 
 	// for ClassMemberFunction 
 	template<class Function>
-	struct JFClassFunction
+	class JF_API JFClassFunction
 	{
 		using ClassType = typename FunctionTraits<Function>::ClassType;
 		using ReturnType = typename FunctionTraits<Function>::ReturnType;

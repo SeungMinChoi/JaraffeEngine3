@@ -3,6 +3,8 @@
 #include "JFFoundation.h"
 #include "JFFramework.h"
 
+#include "JFBetaFunctions.h"
+
 namespace JFEngine
 {
 	using namespace JFFoundation;

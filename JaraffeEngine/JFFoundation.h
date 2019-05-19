@@ -19,7 +19,6 @@ namespace JFFoundation {}
 
 #include "Foundation/JFObject.h"
 
-#include "Foundation/JFThread.h"
 #include "Foundation/JFSpinLock.h"
 #include "Foundation/JFScopeLock.h"
 
