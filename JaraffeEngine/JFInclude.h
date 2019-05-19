@@ -41,8 +41,6 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include <tuple>
-//#include <utility>
 
 #if defined(_WIN32)
 #	include <windows.h>
