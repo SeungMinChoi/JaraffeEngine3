@@ -71,6 +71,7 @@ namespace JFFoundation
 	template <class Class, class Return, class... Params>
 	struct FunctionTraits<Return(Class::*)(Params...)>
 	{
+		using ClassType = Class;
 		using ReturnType = Return;
 		using ParamTypeTuple = JFTypeTuple<Params...>;
 
@@ -79,6 +80,7 @@ namespace JFFoundation
 	template <class Class, class Return, class... Params>
 	struct FunctionTraits<Return(Class::*)(Params...) const>
 	{
+		using ClassType = Class;
 		using ReturnType = Return;
 		using ParamTypeTuple = JFTypeTuple<Params...>;
 

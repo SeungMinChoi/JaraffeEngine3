@@ -1,5 +1,6 @@
 #include "JFEngine.h"
 
+#include <iostream>
 //#include <Windows.h>
 #include <vector>
 #include <algorithm>
@@ -35,11 +36,17 @@ public:
 
 class T2 final
 {
-	void operator () ()
+public:
+	void TestFunc(int a, int b)
 	{
-
+		printf("hi");
+		std::cout << axczxc;
 	}
+
+	int axczxc;
 };
+
+
 
 int main()
 {
@@ -63,19 +70,29 @@ int main()
 	//(*testFunc)(1, 2);
 	//
 
-	auto zxcz = [](int a, int b){};
-	bool sadasd = IsCallable<decltype(zxcz)>::Value;
+	//auto zxcz = [](int a, int b){};
+	//bool sadasd = IsCallable<decltype(zxcz)>::Value;
+	//
+    //JFFunction testFunc2{ TestFunc };
+	////bool sadasd1 = testFunc2.Test();
+	////bool zxczxcasd = testFunc2.t();
+    //testFunc2.Invoke(1, 2);
+	//
+	//auto labda = [a](int a, int b){  printf("hi"); };
+	//auto globalLabda = [](int a, int b){  printf("hi"); };
+	//
+	//JFFunction testFunc3 = std::move(labda);
+	//JFFunction testFunc4 = std::move(globalLabda);
+	//testFunc3.Invoke(1, 2);
 
-    JFFunction testFunc2{ TestFunc };
-	//bool sadasd1 = testFunc2.Test();
-	//bool zxczxcasd = testFunc2.t();
-    testFunc2.Invoke(1, 2);
+	{
+		T2 sadadwq;
+		JFClassFunction testFunc5(&T2::TestFunc, &sadadwq);
+		testFunc5.Invoke(1, 2);
+	}
 
-	auto labda = [a](int a, int b){  printf("hi"); };
-	auto globalLabda = [](int a, int b){  printf("hi"); };
-	JFFunction testFunc3 = std::move(labda);
-	JFFunction testFunc4 = std::move(globalLabda);
-	testFunc3.Invoke(1, 2);
+
+
 	//bool sadasd2 = testFunc3.Test();
 	//bool zxczxc = testFunc3.t();
 
