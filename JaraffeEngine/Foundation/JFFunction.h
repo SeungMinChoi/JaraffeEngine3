@@ -19,7 +19,7 @@ namespace JFFoundation
 		template<class Function>
 		struct CastFunctionOperatorType<false, Function>
 		{
-			using Type = Function * ;
+			using Type = Function*;
 		};
 	}
 

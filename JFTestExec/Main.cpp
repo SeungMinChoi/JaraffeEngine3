@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <string>
 
+#include <thread>
+
 int main()
 {
     JFSpinLock s;

@@ -1,18 +1,19 @@
 #include "JFThread.h"
+#include "JFSpinLock.h"
+#include "JFCondition.h"
+#include "JFScopeLock.h"
+
 #include <process.h>
 
 using namespace JFFoundation;
 
 namespace Private
 {
-	struct ThreadParam
-	{
-		JFThread::ThreadID id;
-	};
+
 
 	unsigned int __stdcall ThreadHandler(void* p)
 	{
-		ThreadParam* thread = reinterpret_cast<ThreadParam*>(p);
+		JFThread* thread = reinterpret_cast<JFThread*>(p);
 		thread->id = ::GetCurrentThreadId();
 
 		return 0;
@@ -25,10 +26,7 @@ JFFoundation::JFThread::JFThread(Runable _runable)
 #if _WIN32
 	// https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/beginthread-beginthreadex?view=vs-2019
 
-	Private::ThreadParam param;
-	//param.runable = fn;
-
-	handle = (HANDLE)::_beginthreadex(nullptr, 0, &Private::ThreadHandler, &param, 0, &id);
+	handle = (HANDLE)::_beginthreadex(nullptr, 0, &Private::ThreadHandler, this, 0, &id);
 	if (!handle)
 	{
 		const DWORD error = ::GetLastError();
@@ -36,15 +34,12 @@ JFFoundation::JFThread::JFThread(Runable _runable)
 	}
 
 
-	//::WaitForSingleObject(handle, INFINITE);
-
-	id = param.id;
-
 #endif // _WIN32
 }
 
 JFFoundation::JFThread::~JFThread() noexcept
 {
+	CloseHandle(handle);
 }
 
 JFThread::ThreadID JFFoundation::JFThread::Id()
