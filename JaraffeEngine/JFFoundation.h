@@ -21,5 +21,3 @@ namespace JFFoundation {}
 
 #include "Foundation/JFSpinLock.h"
 #include "Foundation/JFScopeLock.h"
-
-//#include "Foundation/JFTuple.h"

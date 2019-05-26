@@ -1,4 +1,5 @@
-#include "JFEngine.h"
+//#include "JFEngine.h"
+#include "Foundation/JFFunction.h"
 
 #include <iostream>
 //#include <Windows.h>
@@ -7,17 +8,32 @@
 #include <string>
 
 #include <thread>
+#include <functional>
+
+using namespace JFFoundation;
+
+void Test()
+{
+
+}
 
 int main()
 {
-    JFSpinLock s;
-    JFScopeLock<JFSpinLock> sl(s);
+	auto lambda = []()
+	{};
 
-	JFApplication app;
-	app.Run();
 
-	JFVector2 v = JFVector2::Zero;
-	v.Dot(JFVector2(1));
+	std::function<void()> qwe;
+
+	JFFunction FuncTest1 = [](){};
+	JFFunction FuncTest2 = lambda;
+	JFFunction FuncTest3(Test);
+
+    //JFSpinLock s;
+    //JFScopeLock<JFSpinLock> sl(s);
+
+	//JFApplication app;
+	//app.Run();
 
     system("pause");
     

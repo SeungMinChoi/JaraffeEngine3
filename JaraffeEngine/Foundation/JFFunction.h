@@ -19,7 +19,7 @@ namespace JFFoundation
 		template<class Function>
 		struct CastFunctionOperatorType<false, Function>
 		{
-			using Type = Function*;
+			using Type = Function;
 		};
 	}
 
@@ -33,12 +33,12 @@ namespace JFFoundation
 
 	// for GlobalFunction
 	template <class Function>
-	class JF_API JFFunction
+	class JFFunction
 	{
 		enum { IsCallable = IsCallable<Function>::Value };
 
 		// Callable이 아니라면 GlobalFunction이므로 PointerType으로 받습니다.
-		using FunctionRefType = typename JFConditional<IsCallable, Function, Function*>::Type;
+		using FunctionRefType = typename JFConditional<IsCallable, Function, Function&>::Type;
 
 		// FunctionTraits가능한 Type으로 변환해 줍니다.
 		using FunctionOperatorType = 
@@ -53,7 +53,7 @@ namespace JFFoundation
 		using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
 	
 	public:
-		JFFunction(Function&& f)
+		JFFunction(Function f)
 			: func(f)
 		{}
 
@@ -72,7 +72,7 @@ namespace JFFoundation
 
 	// for ClassMemberFunction 
 	template<class Function>
-	class JF_API JFClassFunction
+	class JFClassFunction
 	{
 		using ClassType = typename FunctionTraits<Function>::ClassType;
 		using ReturnType = typename FunctionTraits<Function>::ReturnType;

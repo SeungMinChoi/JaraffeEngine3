@@ -3,6 +3,7 @@
 #include "JFTypes.h"
 #include "JFTypeTuple.h"
 
+// http://www.cplusplus.com/reference/type_traits/
 namespace JFFoundation
 {
 #pragma region IsPointer
