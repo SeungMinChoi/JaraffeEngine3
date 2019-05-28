@@ -11,84 +11,55 @@
 #include <thread>
 #include <functional>
 
+using namespace std;
 using namespace JFFoundation;
+
+class Hi
+{
+
+};
 
 void Test()
 {
 
 }
 
-template<class T>
-struct TestFunction
-{
-};
-
-template<class R, class... P>
-struct TestFunction<R(P...)>
-{
-	using Type = R(*)(P...);
-
-	TestFunction()
-	{
-
-	}
-	TestFunction(Type t)
-		: testMember(t)
-	{}
-
-	TestFunction& operator = (const TestFunction t)
-	{
-		testMember = t.testMember;
-		return *this;
-	}
-
-	R Invoke(P... params)
-	{
-		return testMember(params...);
-	}
-
-	Type testMember;
-};
-
 int main()
 {
-	auto lambda = []()
-	{};
-
-	std::function<void()> qwe;
-
-	JFFunction FuncTest1 = [](){};
-	JFFunction FuncTest2 = lambda;
-	JFFunction FuncTest3(Test);
-
-	TestFunction<int()> TestFunction1;
+	int a, b;
+	auto lambda = [&a, &b]()
 	{
-		int a = 5;
-		int b = 3;
+		printf("Instance lambda");
+	};
 
-		auto lambda2 = [&a, &b]()
-		{
-			return a + b;
-		};
+	auto lambda2 = []()
+	{
+		printf("GlobalFunction lambda");
+	};
+	JFFunction funcTest(lambda);
+	JFFunction<void()> funcTest2(lambda);
 
-		auto lambda3 = []()
-		{
-			return 0;
-		};
+	JFFunction funcTest3(lambda2);
+	JFFunction funcTest4(Test);
 
-		//TestFunction<int()> z(lambda2);
-		//TestFunction<int()> z2(lambda3);
+	std::function qw = Test;
 
-		using LambdaType2 = decltype(lambda2);
-		using LambdaType3 = decltype(lambda3);
+	bool test = IsCallable<decltype(Test)>::Value;
+	FunctionTraits<decltype(&Test)>::FunctionPrototype;
 
-		//TestFunction1 = TestFunction<int()>(lambda2);
-		auto t = std::is_trivially_copyable<decltype(&LambdaType2::operator())>::value;
-		auto t2 = std::is_trivially_copyable<decltype(&LambdaType3::operator())>::value;
-		int qwe = 0;
-	}
+	std::is_class<Hi>;
 
-	TestFunction1.Invoke();
+	//void(*Test)() = lambda2;
+
+	int t = IsGlobalLambda<decltype(lambda)>::Value;
+	int t2 = IsGlobalLambda<decltype(lambda2)>::Value;
+
+	//std::is_class<decltype(Test)>::
+	int t5 = __is_class(decltype(Test));
+
+	int t4 = IsClass<Hi>::Value;
+
+	//JFFunction funcTest4(Test);
 
     //JFSpinLock s;
     //JFScopeLock<JFSpinLock> sl(s);

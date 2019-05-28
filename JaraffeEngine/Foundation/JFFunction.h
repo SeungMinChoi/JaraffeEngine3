@@ -5,92 +5,62 @@
 
 namespace JFFoundation
 {
-	namespace Helper
+	namespace InternalImpl
 	{
-		template<bool B, class Function>
-		struct CastFunctionOperatorType;
+		template<class T, bool> struct CastRefType;
+		template<class T> struct CastRefType<T, true>
+		{
+			using Type = T&;
+		};
+		template<class T> struct CastRefType<T, false>
+		{
+			using Type = T;
+		};
 
-		template<class Function>
-		struct CastFunctionOperatorType<true, Function>
+		template<class Function, bool> struct CastFunctionOperatortype;
+		template<class Function> struct CastFunctionOperatortype<Function, true>
 		{
 			using Type = decltype(&Function::operator());
 		};
+		template<class Function> struct CastFunctionOperatortype<Function, false>
+		{
+			using Type = typename JFConditional<std::is_function<Function>::value, Function, Function&>::Type;
+		};
 
 		template<class Function>
-		struct CastFunctionOperatorType<false, Function>
+		class DeduceFunctionTraits
 		{
-			using Type = Function;
+			using FunctionType = typename JFConditional<IsCallable<Function>::Value, 
+														typename CastFunctionOperatortype<Function, true>::Type, 
+														typename CastFunctionOperatortype<Function, false>::Type>::Type;
+
+		public:
+			using FunctionPrototype = typename FunctionTraits<FunctionType>::FunctionPrototype;
+		};
+
+		struct Invoker
+		{
+		};
+
+		template<class Function>
+		struct InvokerImpl
+		{
+
 		};
 	}
 
-	//template <class Function>
-	//class JFFunction
-	//{
-	//public:
-	//	// User-defined deduction guides
-	//	JFFunction(Function*);
-	//};
-
-	// for GlobalFunction
-	template <class Function>
+	template<class FunctionProtoType>
 	class JFFunction
 	{
-		enum { IsCallable = IsCallable<Function>::Value };
-
-		// Callable이 아니라면 GlobalFunction이므로 PointerType으로 받습니다.
-		using FunctionRefType = typename JFConditional<IsCallable, Function, Function&>::Type;
-
-		// FunctionTraits가능한 Type으로 변환해 줍니다.
-		using FunctionOperatorType = 
-			typename JFConditional<IsCallable, 
-				Helper::CastFunctionOperatorType<true, Function>, 
-				Helper::CastFunctionOperatorType<false, Function>>::Type;
-
-		// Function Info
-		using FunctionInfo = FunctionTraits<typename FunctionOperatorType::Type>;
-
-		using RetrunType = typename FunctionInfo::ReturnType;
-		using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
-	
 	public:
-		JFFunction(Function f)
-			: func(f)
-		{}
-
-		template<class... Params>
-		RetrunType Invoke(Params... params)
+		template<class Function>
+		JFFunction(Function func)
 		{
-			return func(params...);
-		}
 
-	private:
-		FunctionRefType func;
+		}
 	};
 
-	// TODO : 일단MemberFunction은 좋은 아이디어가 생길때 까진 이렇게 사용.
-	// ClassType은 SmartPointer로 받도록 하기
-
-	// for ClassMemberFunction 
+	// Deduce signature
 	template<class Function>
-	class JFClassFunction
-	{
-		using ClassType = typename FunctionTraits<Function>::ClassType;
-		using ReturnType = typename FunctionTraits<Function>::ReturnType;
-		using FunctionType = typename FunctionTraits<Function>::FunctionType;
-	
-		JFClassFunction(Function&& f, ClassType* c)
-			: func(f)
-			, classPointer(c)
-		{}
-	
-		template<class... Params>
-		ReturnType Invoke(Params... params)
-		{
-			return (classPointer->*func)(params...);
-		}
-	
-	private:
-		Function func;
-		ClassType* classPointer;
-	};
+	JFFunction(Function) -> JFFunction<typename InternalImpl::DeduceFunctionTraits<Function>::FunctionPrototype>;
 }
