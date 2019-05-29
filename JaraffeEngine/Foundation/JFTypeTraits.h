@@ -40,10 +40,26 @@ namespace JFFoundation
 		using ReturnType = Return;
 		using ParamTypeTuple = JFTypeTuple<Params...>;
 
-		using FunctionType = Return(Class::*)(Params...) const;
-		using FunctionPrototype = Return(Params...) const;
+		using FunctionType = Return(Class::*)(Params...);
+		using FunctionPrototype = Return(Params...);
 	};
 #pragma endregion
+
+#pragma region FunctionPrototypeTraits
+    template <class FunctionPrototype>
+    struct FunctionPrototypeTraits;
+
+    template <class Return, class... Params>
+    struct FunctionPrototypeTraits<Return(Params...)>
+    {
+        using ReturnType = Return;
+        using ParamTypeTuple = JFTypeTuple<Params...>;
+
+        using FunctionType = Return(*)(Params...);
+        using FunctionPrototype = Return(Params...);
+    };
+#pragma endregion
+
 #pragma region IsPointer
 	template<class T>
 	struct IsPointer
@@ -71,8 +87,6 @@ namespace JFFoundation
 		using ReturnType = typename FunctionInfo::ReturnType;
 		using FunctionType = typename FunctionInfo::FunctionType;
 		using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
-
-		template<class... Params> using GloabalLambdaType = ReturnType(*)(Params...);
 
 		template<class ReturnType, class... Params> static JFTrue Test(ReturnType(*)(Params...));
 		template<class ReturnType, class... Params> static JFFalse Test(...);

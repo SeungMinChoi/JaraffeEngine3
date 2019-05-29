@@ -14,11 +14,6 @@
 using namespace std;
 using namespace JFFoundation;
 
-class Hi
-{
-
-};
-
 void Test()
 {
 
@@ -38,29 +33,11 @@ int main()
 	};
 	JFFunction funcTest(lambda);
 	JFFunction<void()> funcTest2(lambda);
-
 	JFFunction funcTest3(lambda2);
 	JFFunction funcTest4(Test);
 
-	std::function qw = Test;
-
-	bool test = IsCallable<decltype(Test)>::Value;
-	FunctionTraits<decltype(&Test)>::FunctionPrototype;
-
-	std::is_class<Hi>;
-
-	//void(*Test)() = lambda2;
-
-	int t = IsGlobalLambda<decltype(lambda)>::Value;
-	int t2 = IsGlobalLambda<decltype(lambda2)>::Value;
-
-	//std::is_class<decltype(Test)>::
-	int t5 = __is_class(decltype(Test));
-
-	int t4 = IsClass<Hi>::Value;
-
-	//JFFunction funcTest4(Test);
-
+    auto t1 = IsGlobalLambda<decltype(lambda)>::Value;
+    auto t2 = IsGlobalLambda<decltype(lambda2)>::Value;
     //JFSpinLock s;
     //JFScopeLock<JFSpinLock> sl(s);
 
