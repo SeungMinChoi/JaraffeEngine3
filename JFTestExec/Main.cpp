@@ -36,8 +36,8 @@ int main()
 	JFFunction funcTest3(lambda2);
 	JFFunction funcTest4(Test);
 
-    auto t1 = IsGlobalLambda<decltype(lambda)>::Value;
-    auto t2 = IsGlobalLambda<decltype(lambda2)>::Value;
+    //auto t1 = IsGlobalLambda<decltype(lambda)>::Value;
+    //auto t2 = IsGlobalLambda<decltype(lambda2)>::Value;
     //JFSpinLock s;
     //JFScopeLock<JFSpinLock> sl(s);
 

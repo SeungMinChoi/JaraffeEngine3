@@ -2,6 +2,7 @@
 
 #include "JFTuple.h"
 #include "JFTypeTraits.h"
+#include "JFTypeTuple.h"
 
 namespace JFFoundation
 {
@@ -42,25 +43,31 @@ namespace JFFoundation
 			using FunctionPrototype = typename FunctionTraits<FunctionType>::FunctionPrototype;
 		};
 
-        template<class ResultType, class... Params>
-		struct Invoker
-		{
-		};
-
-        template<class Function, class ResultType, class... Params>
-		struct InvokerImpl : Invoker<ResultType, Params>
-		{
-
-		};
+       
 	}
+
+    template<class ReturnType, class... Params>
+    struct Invoker
+    {
+    };
+
+    template<class Function, class ReturnType, class... Params>
+    struct InvokerImpl : public Invoker<ReturnType, Params>
+    {
+
+    };
 
 	template<class FunctionProtoType>
 	class JFFunction
 	{
-        using ReturnType = typename FunctionPrototypeTraits<FunctionProtoType>::ReturnType;
-        using ParamTypeTuple = typename FunctionPrototypeTraits<FunctionProtoType>::ParamTypeTuple;
+        using FunctionInfo = FunctionPrototypeTraits<FunctionProtoType>;
 
-        template< using InvokerType = 
+        using ReturnType = typename FunctionInfo::ReturnType;
+        using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
+
+        template<class... Params> using _InvokerType = Invoker<ReturnType, Params...>;
+        //using InvokerType = ParamTypeTuple::InputTypes<_InvokerType>;
+
 	public:
 	    template<class Function>
 		JFFunction(Function func)
@@ -69,8 +76,7 @@ namespace JFFoundation
 		}
 
     private:
-        ParamTypeTuple::InputTypes<>
-        InternalImpl::Invoker<ReturnType, >* invoker;
+        //InvokerType* invoker;
 	};
 
 	// Deduce signature
