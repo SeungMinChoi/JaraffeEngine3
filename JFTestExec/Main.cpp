@@ -22,12 +22,12 @@ void Test()
 int main()
 {
 	int a, b;
-	auto lambda = [&a, &b]()
+	auto lambda = [a, &b]()
 	{
 		printf("Instance lambda");
 	};
 
-	auto lambda2 = []()
+	auto lambda2 = [](int i)
 	{
 		printf("GlobalFunction lambda");
 	};
@@ -36,8 +36,18 @@ int main()
 	JFFunction funcTest3(lambda2);
 	JFFunction funcTest4(Test);
 
-    //auto t1 = IsGlobalLambda<decltype(lambda)>::Value;
-    //auto t2 = IsGlobalLambda<decltype(lambda2)>::Value;
+    auto t3 = sizeof(decltype(lambda));
+    auto t4 = sizeof(decltype(lambda2));
+
+    auto t1 = IsGlobalLambda<decltype(lambda)>::Value;
+    auto t2 = IsGlobalLambda<decltype(lambda2)>::Value;
+
+    using FuncInfo = FunctionPrototypeTraits<void()>;
+
+    using TestType = decltype(funcTest4);
+    FuncInfo::ParamTypeTuple::InputTypes<TestType::_InvokerType> aqwqwq;
+
+
     //JFSpinLock s;
     //JFScopeLock<JFSpinLock> sl(s);
 

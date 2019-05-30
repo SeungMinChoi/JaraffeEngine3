@@ -47,11 +47,16 @@ namespace JFFoundation
 
 #pragma region FunctionPrototypeTraits
     template <class FunctionPrototype>
-    struct FunctionPrototypeTraits;
+    struct FunctionPrototypeTraits
+    {
+        enum { Test = 0 };
+    };
 
     template <class Return, class... Params>
     struct FunctionPrototypeTraits<Return(Params...)>
     {
+        enum { Test = 1 };
+
         using ReturnType = Return;
         using ParamTypeTuple = JFTypeTuple<Params...>;
 
@@ -82,18 +87,14 @@ namespace JFFoundation
 	template<class T>
 	class IsGlobalLambda
 	{
-		using FunctionInfo = FunctionTraits<decltype(&T::operator())>;
+        static constexpr int GlobalLambdaSize()
+        {
+            auto gloabalLambda = [](){};
+            return sizeof(gloabalLambda);
+        }
 
-		using ReturnType = typename FunctionInfo::ReturnType;
-		using FunctionType = typename FunctionInfo::FunctionType;
-		using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
-
-		template<class ReturnType, class... Params> static JFTrue Test(ReturnType(*)(Params...));
-		template<class ReturnType, class... Params> static JFFalse Test(...);
-
-		template<class... Params> using TestType = decltype(Test<ReturnType, Params...>(0));
 	public:
-		enum { Value = ParamTypeTuple::InputTypes<TestType>::Value };
+		enum { Value = (sizeof(T) == GlobalLambdaSize()) };
 	};
 #pragma endregion
 

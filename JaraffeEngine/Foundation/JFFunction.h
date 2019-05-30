@@ -1,8 +1,6 @@
 #pragma once
 
-#include "JFTuple.h"
 #include "JFTypeTraits.h"
-#include "JFTypeTuple.h"
 
 namespace JFFoundation
 {
@@ -43,30 +41,29 @@ namespace JFFoundation
 			using FunctionPrototype = typename FunctionTraits<FunctionType>::FunctionPrototype;
 		};
 
-       
+        template<class ReturnType, class... Params>
+        struct Invoker
+        {
+        };
+
+        template<class Function, class ReturnType, class... Params>
+        struct InvokerImpl : public Invoker<ReturnType, Params>
+        {
+
+        };
 	}
-
-    template<class ReturnType, class... Params>
-    struct Invoker
-    {
-    };
-
-    template<class Function, class ReturnType, class... Params>
-    struct InvokerImpl : public Invoker<ReturnType, Params>
-    {
-
-    };
 
 	template<class FunctionProtoType>
 	class JFFunction
 	{
+    public:
         using FunctionInfo = FunctionPrototypeTraits<FunctionProtoType>;
 
         using ReturnType = typename FunctionInfo::ReturnType;
         using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
 
-        template<class... Params> using _InvokerType = Invoker<ReturnType, Params...>;
-        //using InvokerType = ParamTypeTuple::InputTypes<_InvokerType>;
+        template<class... Params> using _InvokerType = InternalImpl::Invoker<ReturnType, Params...>;
+        //using InvokerType = typename FunctionInfo::ParamTypeTuple::InputTypes<_InvokerType>;
 
 	public:
 	    template<class Function>
@@ -76,6 +73,7 @@ namespace JFFoundation
 		}
 
     private:
+        
         //InvokerType* invoker;
 	};
 
