@@ -85,16 +85,21 @@ namespace JFFoundation
 
 #pragma region IsGlobalLambda
 	template<class T>
-	class IsGlobalLambda
-	{
-        static constexpr int GlobalLambdaSize()
-        {
-            auto gloabalLambda = [](){};
-            return sizeof(gloabalLambda);
-        }
+    class IsGlobalLambda
+    {
+        using OpertorType = IsGlobalLambda<decltype(&T::operator())>;
+        static T MakeInstance();
 
-	public:
-		enum { Value = (sizeof(T) == GlobalLambdaSize()) };
+    public:
+        enum { Value = decltype(OpertorType::Test( MakeInstance() ))::Value };
+    };
+
+    template<class Class, class ResultType, class... Params>
+    class IsGlobalLambda<ResultType(Class::*)(Params...) const>
+	{
+    public:
+        static JFTrue Test(ResultType(*)(Params...));
+        static JFFalse Test(...);
 	};
 #pragma endregion
 
