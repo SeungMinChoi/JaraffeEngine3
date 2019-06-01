@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../JFInclude.h"
+
 namespace JFFramework
 {
 	class JFWindow;

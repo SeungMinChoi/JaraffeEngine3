@@ -5,9 +5,8 @@
 
 namespace JFFoundation
 {
-	// TODO :ref count 만들어야함
 	template <typename T>
-	class JF_API JFObject
+	class JFObject
 	{
 	public:
 		JFObject(T* p = nullptr)
@@ -67,7 +66,9 @@ namespace JFFoundation
 		{
 			if (target != obj)
 			{
-				Release();
+                if (target)
+				    Release();
+
 				refCounter = new JFRefCounter();
 			}
 
@@ -77,8 +78,11 @@ namespace JFFoundation
 		}
 		JFObject& operator = (const JFObject& obj)
 		{
-			if(target != obj.target)
-				Release();
+            if (target != obj.target)
+            {
+                if (target)
+                    Release();
+            }
 
 			target = obj.target;
 			refCounter = obj.refCounter;
@@ -88,8 +92,11 @@ namespace JFFoundation
 		}
 		JFObject& operator = (JFObject&& obj) noexcept
 		{
-			if(target != obj.target)
-				Release();
+            if (target != obj.target)
+            {
+                if (target)
+                    Release();
+            }
 
 			target = obj.target;
 			refCounter = obj.refCounter;
@@ -122,13 +129,13 @@ namespace JFFoundation
 				// 이 부분을 따로 빼야함. ( 전방선언이 안먹힘 )
 				delete target;
 				delete refCounter;
-
+                
 				target = nullptr;
 				refCounter = nullptr;
 			}
 		}
 
-		T* target;
+		T* target = nullptr;
 		JFRefCounter* refCounter;
 	};
 }

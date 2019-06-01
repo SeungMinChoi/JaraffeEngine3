@@ -15,14 +15,14 @@ namespace JFFoundation
 
 		~JFCondition() noexcept;
 
-		void Lock();
-		bool TryLock();
-		void Unlock();
+		void Lock() const;
+		bool TryLock() const;
+		void Unlock() const;
 
-		void Sleep(MilliSecond wait = DefaultWaitTime);
+		void Sleep(MilliSecond wait = DefaultWaitTime) const;
 
-		void Wake();
-		void WakeAll();
+		void Wake()  const;
+		void WakeAll() const;
 
 	private:
 		JFCondition(const JFCondition&) = delete;

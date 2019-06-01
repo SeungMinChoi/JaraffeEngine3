@@ -76,37 +76,37 @@ JFFoundation::JFCondition::~JFCondition() noexcept
 	}
 }
 
-void JFFoundation::JFCondition::Lock()
+void JFFoundation::JFCondition::Lock() const
 {
 	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Lock();
 }
 
-bool JFFoundation::JFCondition::TryLock()
+bool JFFoundation::JFCondition::TryLock() const
 {
 	assert(impl);
 	return reinterpret_cast<Private::JFConditionImpl*>(impl)->TryLock();
 }
 
-void JFFoundation::JFCondition::Unlock()
+void JFFoundation::JFCondition::Unlock() const
 {
 	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Unlock();
 }
 
-void JFFoundation::JFCondition::Sleep(MilliSecond wait)
+void JFFoundation::JFCondition::Sleep(MilliSecond wait) const
 {
 	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Sleep(wait);
 }
 
-void JFFoundation::JFCondition::Wake()
+void JFFoundation::JFCondition::Wake() const
 {
 	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->Wake();
 }
 
-void JFFoundation::JFCondition::WakeAll()
+void JFFoundation::JFCondition::WakeAll() const
 {
 	assert(impl);
 	reinterpret_cast<Private::JFConditionImpl*>(impl)->WakeAll();

@@ -15,6 +15,18 @@ JFFramework::JFApplication::~JFApplication()
 	graphicsDevice->Destroy();
 	window->Destroy();
 	DestroyConsole();
+
+    if (graphicsDevice)
+    {
+        delete graphicsDevice;
+        graphicsDevice = nullptr;
+    }
+
+    if (window)
+    {
+        delete window;
+        window = nullptr;
+    }
 }
 
 void JFFramework::JFApplication::Run()

@@ -1,54 +1,29 @@
-//#include "JFEngine.h"
-#include "Foundation/JFFunction.h"
-#include "Foundation/JFTypeTraits.h"
+#include "JFEngine.h"
 
 #include <iostream>
-//#include <Windows.h>
-#include <vector>
-#include <algorithm>
-#include <string>
-
-#include <thread>
-#include <functional>
-
 using namespace std;
 using namespace JFFoundation;
 
-void Test()
-{
-
-}
-
 int main()
 {
-    JFFunction<void()> funcTest5;
+    JFThread thread([]()
     {
-        int a, b;
-        auto lambda = [a, b]()
+        int count = 0;
+        while (++count <= 20)
         {
-            printf("Instance lambda");
-        };
+            printf("Hellow thread world\n");
+            Sleep(100);
+        }
+    });
 
-        auto lambda2 = [](int i)
-        {
-            printf("GlobalFunction lambda");
-        };
-        JFFunction funcTest(lambda);
-        JFFunction<void()> funcTest2(lambda);
-        JFFunction funcTest3(lambda2);
-        JFFunction funcTest4(Test);
-
-        funcTest5 = lambda;
-    }
-
-    funcTest5.Invoke();
-    
    //InternalImpl::DeduceFunctionTraits<decltype(Test)>::FunctionType;
     //JFSpinLock s;
     //JFScopeLock<JFSpinLock> sl(s);
 
 	//JFApplication app;
 	//app.Run();
+
+    Sleep(1000);
 
     system("pause");
     

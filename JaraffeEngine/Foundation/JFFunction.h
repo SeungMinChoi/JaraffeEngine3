@@ -1,5 +1,6 @@
 #pragma once
 
+#include "JFObject.h"
 #include "JFTypeTraits.h"
 
 namespace JFFoundation
@@ -62,14 +63,14 @@ namespace JFFoundation
             }
 
         private:
-            FunctionRef func;
+            Function func;
         };
 	}
 
+    // TODO : ProtoType과 FunctionType을 같이 못다루는 약점을 개선해야함
 	template<class FunctionProtoType>
 	class JFFunction
 	{
-    public:
         using FunctionInfo = FunctionPrototypeTraits<FunctionProtoType>;
         using ReturnType = typename FunctionInfo::ReturnType;
         using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
@@ -85,33 +86,59 @@ namespace JFFoundation
         template<class Function>
 		JFFunction(Function func)
 		{
+            // TODO : 메모리풀 만들면 변경해줘야함.
             using InvokerImplType = typename ParamTypeTuple::template InputTypes<_InvokerImplType, Function>;
             invoker = new InvokerImplType(std::forward<Function>(func));
 		}
 
-        ~JFFunction()
+        // TODO : 약점 개선되면 Deep copy로 변경해야함
+        JFFunction(const JFFunction& function)
         {
-            if(invoker)
-                delete invoker;
+            invoker = function.invoker;
+        }
+
+        // TODO : 약점 개선되면 Deep copy로 변경해야함
+        JFFunction(JFFunction&& rhs) noexcept
+            : invoker(rhs.invoker)
+        {
+            rhs.invoker = nullptr;
         }
 
         template<class Function>
-        JFFunction& operator = (Function&& func)
+        JFFunction& operator = (Function func)
         {
             using InvokerImplType = typename ParamTypeTuple::template InputTypes<_InvokerImplType, Function>;
             invoker = new InvokerImplType(std::forward<Function>(func));
             return *this;
         }
 
-        // TODO : 이것만 해결하면 됨..
+        // TODO : 약점 개선되면 Deep copy로 변경해야함
+        JFFunction& operator = (const JFFunction& function)
+        {
+            invoker = function.invoker;
+            return *this;
+        }
+
+        JFFunction& operator = (JFFunction&& rhs) noexcept
+        {
+            invoker = rhs.invoker;
+            rhs.invoker = nullptr;
+            return *this;
+        }
+
+        // TODO : 이것도 해결해야함.
         template<class... Params>
         ReturnType Invoke(Params... params)
         {
-            invoker->Invoke(params...);
+            assert(invoker);
+            if (invoker)
+            {
+                invoker->Invoke(params...);
+            }
         }
 
     private:
-        InvokerType* invoker = nullptr;
+        JFObject<InvokerType> invoker;
 	};
 
 	// Deduce signature

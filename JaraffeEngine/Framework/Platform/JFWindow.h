@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../JFSize.h"
+#include "../../JFInclude.h"
 
 namespace JFFramework
 {

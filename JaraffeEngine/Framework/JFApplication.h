@@ -30,7 +30,7 @@ namespace JFFramework
 	private:
 		bool isExit = false;
 
-		JFObject<JFWindow> window;
-		JFObject<JFGraphicsDevice> graphicsDevice;
+		JFWindow* window;
+		JFGraphicsDevice* graphicsDevice;
 	};
 }

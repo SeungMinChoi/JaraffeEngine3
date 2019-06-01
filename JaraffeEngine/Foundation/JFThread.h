@@ -8,12 +8,11 @@ namespace JFFoundation
 	class JF_API JFThread
 	{
 	public:
-		//using Runable = JFFunction<void()>;
+		using Runable = JFFunction<void()>;
 		using ThreadID = unsigned int;
 		using NativeHandle = void*;
 
-        //JFThread(Runable runable);
-		JFThread();
+        JFThread(Runable runable);
         ~JFThread() noexcept;
 
 		ThreadID Id();
