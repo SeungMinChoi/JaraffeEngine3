@@ -89,42 +89,17 @@ namespace JFFoundation
     {
         using OpertorType = IsGlobalLambda<decltype(&T::operator())>;
         static T MakeInstance();
-
+    
     public:
         enum { Value = decltype(OpertorType::Test( MakeInstance() ))::Value };
     };
-
+    
     template<class Class, class ResultType, class... Params>
     class IsGlobalLambda<ResultType(Class::*)(Params...) const>
 	{
     public:
         static JFTrue Test(ResultType(*)(Params...));
         static JFFalse Test(...);
-	};
-#pragma endregion
-
-#pragma region IsClass
-	template<class T>
-	class IsClass
-	{
-		template<class U> static JFTrue Test(int T::*);
-		template<class U> static JFFalse Test(...);
-
-	public:
-		enum { Value = decltype(Test<T>(0))::Value };
-	};
-#pragma endregion
-
-#pragma region IsCallable
-	template<class T>
-	class IsCallable
-	{
-		// operator가 private일땐 false. ( private일때도 굳이 확인하고 싶다면 상속을 이용. 근대 final이면?? )
-		template<class U> static JFTrue Test(decltype(&U::operator())*);
-		template<class U> static JFFalse Test(...);
-
-	public:
-		enum { Value = decltype(Test<T>(0))::Value };
 	};
 #pragma endregion
 
@@ -144,4 +119,5 @@ namespace JFFoundation
 		enum { Value = decltype(Test<T>(MakePointer<T>()))::Value };
 	};
 #pragma endregion
+
 }

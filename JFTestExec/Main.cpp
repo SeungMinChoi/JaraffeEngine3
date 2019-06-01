@@ -21,33 +21,29 @@ void Test()
 
 int main()
 {
-	int a, b;
-	auto lambda = [a, &b]()
-	{
-		printf("Instance lambda");
-	};
+    JFFunction<void()> funcTest5;
+    {
+        int a, b;
+        auto lambda = [a, b]()
+        {
+            printf("Instance lambda");
+        };
 
-	auto lambda2 = [](int i)
-	{
-		printf("GlobalFunction lambda");
-	};
-	JFFunction funcTest(lambda);
-	JFFunction<void()> funcTest2(lambda);
-	JFFunction funcTest3(lambda2);
-	JFFunction funcTest4(Test);
+        auto lambda2 = [](int i)
+        {
+            printf("GlobalFunction lambda");
+        };
+        JFFunction funcTest(lambda);
+        JFFunction<void()> funcTest2(lambda);
+        JFFunction funcTest3(lambda2);
+        JFFunction funcTest4(Test);
 
-    auto t3 = sizeof(decltype(lambda));
-    auto t4 = sizeof(decltype(lambda2));
+        funcTest5 = lambda;
+    }
 
-    auto t1 = IsGlobalLambda<decltype(lambda)>::Value;
-    auto t2 = IsGlobalLambda<decltype(lambda2)>::Value;
-
-    using FuncInfo = FunctionPrototypeTraits<void()>;
-
-    using TestType = decltype(funcTest4);
-    FuncInfo::ParamTypeTuple::InputTypes<TestType::_InvokerType> aqwqwq;
-
-
+    funcTest5.Invoke();
+    
+   //InternalImpl::DeduceFunctionTraits<decltype(Test)>::FunctionType;
     //JFSpinLock s;
     //JFScopeLock<JFSpinLock> sl(s);
 

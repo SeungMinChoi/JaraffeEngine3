@@ -13,43 +13,56 @@ namespace JFFoundation
 		};
 		template<class T> struct CastRefType<T, false>
 		{
-			using Type = T;
+			using Type = std::remove_reference_t<T>;
 		};
 
-		template<class Function, bool> struct CastFunctionOperatortype;
-		template<class Function> struct CastFunctionOperatortype<Function, true>
-		{
-			using Type = decltype(&Function::operator());
-		};
-		template<class Function> struct CastFunctionOperatortype<Function, false>
-		{
-			using Type = 
-				typename JFConditional<std::is_function<Function>::value, 
-														 CastRefType<Function, false>, 
-														 CastRefType<Function, false>>::Type::Type;
-		};
+        template<class Function, bool> struct CastFunctionOperatortype;
+        template<class Function> struct CastFunctionOperatortype<Function, true>
+        {
+            using Type = decltype(&Function::operator());
+        };
+        template<class Function> struct CastFunctionOperatortype<Function, false>
+        {
+            using Type = Function;
+        };
 
 		template<class Function>
 		class DeduceFunctionTraits
 		{
-			using FunctionType = 
-				typename JFConditional<IsCallable<Function>::Value, 
-														CastFunctionOperatortype<Function, true>, 
-														CastFunctionOperatortype<Function, false>>::Type::Type;
+        public:
+            using FunctionType = typename CastFunctionOperatortype<Function,  std::is_class_v<Function>>::Type;
 
 		public:
 			using FunctionPrototype = typename FunctionTraits<FunctionType>::FunctionPrototype;
 		};
 
+        // VTable 도 제거하고 싶은대.. 일단 아이디어가 떠오를때까진 이렇게..
+        // ( 사실 메모리풀 만들면 그렇기 신경 안써도 될 듯. )
         template<class ReturnType, class... Params>
-        struct Invoker
+        class Invoker
         {
+        public:
+            virtual ReturnType Invoke(Params... Param){}
         };
 
         template<class Function, class ReturnType, class... Params>
-        struct InvokerImpl : public Invoker<ReturnType, Params>
+        class InvokerImpl : public Invoker<ReturnType, Params...>
         {
+            // class가 아니라면 RefType으로
+            using FunctionRef = typename CastRefType<Function, !std::is_class_v<Function>>::Type;
 
+        public:
+            InvokerImpl(Function f)
+                : func(f)
+            {}
+            
+            ReturnType Invoke(Params... Param) override
+            {
+                return func(Param...);
+            }
+
+        private:
+            FunctionRef func;
         };
 	}
 
@@ -58,23 +71,47 @@ namespace JFFoundation
 	{
     public:
         using FunctionInfo = FunctionPrototypeTraits<FunctionProtoType>;
-
         using ReturnType = typename FunctionInfo::ReturnType;
         using ParamTypeTuple = typename FunctionInfo::ParamTypeTuple;
 
         template<class... Params> using _InvokerType = InternalImpl::Invoker<ReturnType, Params...>;
-        //using InvokerType = typename FunctionInfo::ParamTypeTuple::InputTypes<_InvokerType>;
+        using InvokerType = typename ParamTypeTuple::template InputTypes<_InvokerType>;
+
+        template<class Function, class... Params> using _InvokerImplType = InternalImpl::InvokerImpl<Function, ReturnType, Params...>;
 
 	public:
-	    template<class Function>
+        JFFunction(){}
+	    
+        template<class Function>
 		JFFunction(Function func)
 		{
-
+            using InvokerImplType = typename ParamTypeTuple::template InputTypes<_InvokerImplType, Function>;
+            invoker = new InvokerImplType(std::forward<Function>(func));
 		}
 
+        ~JFFunction()
+        {
+            if(invoker)
+                delete invoker;
+        }
+
+        template<class Function>
+        JFFunction& operator = (Function&& func)
+        {
+            using InvokerImplType = typename ParamTypeTuple::template InputTypes<_InvokerImplType, Function>;
+            invoker = new InvokerImplType(std::forward<Function>(func));
+            return *this;
+        }
+
+        // TODO : 이것만 해결하면 됨..
+        template<class... Params>
+        ReturnType Invoke(Params... params)
+        {
+            invoker->Invoke(params...);
+        }
+
     private:
-        
-        //InvokerType* invoker;
+        InvokerType* invoker = nullptr;
 	};
 
 	// Deduce signature
